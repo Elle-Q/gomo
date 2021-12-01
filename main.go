@@ -1,4 +1,4 @@
-package cmd
+package gomo
 
 import "github.com/gin-gonic/gin"
 

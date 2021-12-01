@@ -1,9 +1,0 @@
-{
-  "Database": {
-    "Username": "postgres",
-    "Password": "Ggg123654.",
-    "Host": "localhost",
-    "Port": 5432,
-    "SSLMode": true
-  }
-}
