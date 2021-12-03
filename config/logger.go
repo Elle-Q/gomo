@@ -13,3 +13,5 @@ type Logger struct {
 func (e Logger) Setup()  {
 	//log.Logger.s
 }
+
+var LoggerConfig = new(Logger)

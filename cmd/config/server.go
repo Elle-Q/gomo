@@ -14,7 +14,11 @@ var (
 	}
 )
 
+func init() {
+	StartCmd.PersistentFlags().StringVarP(&configYml, "config", "c", "config/config.yml", "Start server with provided configuration file")
+}
+
 func run() {
-	//config
+	config.set
 }
 

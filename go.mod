@@ -1,6 +1,7 @@
 module gomo
 
 require (
+	github.com/fsnotify/fsnotify v1.4.9
 	github.com/gin-gonic/gin v1.7.7
 	github.com/jinzhu/configor v1.2.1
 	github.com/spf13/cobra v1.2.1

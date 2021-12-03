@@ -2,10 +2,10 @@ package config
 
 import (
 	"github.com/jinzhu/configor"
+	"gomo/common/file"
 	"log"
 )
 
-// Settings 兼容原先的配置结构
 type Settings struct {
 	Settings  Config `yaml:"settings"`
 	callbacks []func()
@@ -23,7 +23,8 @@ func (e *Settings) onChange() {
 }
 
 func (e *Settings) init() {
-	//e.Settings
+	e.Settings.Logger.Setup()
+	e.runCallback()
 }
 
 
@@ -33,6 +34,18 @@ type Config struct {
 	Database    *Database             `yaml:"database"`
 	//Cache       *Cache                `yaml:"cache"`
 	//Queue       *Queue                `yaml:"queue"`
+}
+
+func Setup(s file.Source, fs ...func())  {
+	_cfg = &Settings{
+		Settings: Config{
+			Application: ApplicationConfig,
+			Logger:      LoggerConfig,
+		},
+		callbacks: fs,
+	}
+	var err error
+
 }
 
 var Main = (func() Config  {
