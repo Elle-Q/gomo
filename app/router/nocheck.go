@@ -1,0 +1,26 @@
+package router
+
+import (
+	"github.com/gin-gonic/gin"
+	"gomo/app/api"
+	"gomo/common/actions"
+)
+
+
+func init()  {
+	routerNoCheckRole = append(routerNoCheckRole, registerNoCheckRouter)
+}
+
+func registerNoCheckRouter(g *gin.RouterGroup) {
+
+	_CatApi := api.Category{}
+	category := g.Group("/category").Use(actions.PermissionAction())
+	{
+		category.GET("/list", _CatApi.List)
+		//r.GET("/:id", api.Get)
+		//r.POST("", api.Insert)
+		//r.PUT("", api.Update)
+		//r.DELETE("", api.Delete)
+	}
+
+}

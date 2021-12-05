@@ -3,7 +3,7 @@ application:
   mode: dev       #开发环境 dev  test  prod
   host: 127.0.0.1
   name: gomo-App
-  port: 8088
+  port: 8089
   readtimeout: 1
   writertimeout: 1
 

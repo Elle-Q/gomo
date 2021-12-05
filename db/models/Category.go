@@ -4,7 +4,7 @@ import "time"
 
 type Category struct {
 	ID int64
-	title string
+	Title string
 	SubTitle string
 	Preview string
 	Desc string

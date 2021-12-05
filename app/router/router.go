@@ -9,10 +9,10 @@ import (
 
 var (
 	routerNoCheckRole = make([]func(*gin.RouterGroup), 0)
-	//routerCheckRole = make([]func(*gin.RouterGroup), 0)
+	routerCheckRole = make([]func(*gin.RouterGroup), 0)
 )
 
-func InitRoute() *gin.Engine {
+func InitRouter()  {
 	var r *gin.Engine
 	h := runtime.App.GetEngine()
 	if h == nil {
@@ -35,8 +35,6 @@ func InitRoute() *gin.Engine {
 	noCheckRoleRouter(r)
 
 	//2. todo: 需要认证的路由
-
-	return r
 }
 
 func noCheckRoleRouter(r *gin.Engine) {

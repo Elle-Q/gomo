@@ -7,6 +7,7 @@ import (
 	"github.com/gin-gonic/gin"
 	_ "github.com/lib/pq"
 	"github.com/spf13/cobra"
+	"gomo/app/router"
 	"gomo/common/global"
 	"gomo/common/middleware"
 	"gomo/common/runtime"
@@ -35,6 +36,12 @@ var (
 
 var AppRouters = make([]func(), 0)
 
+func init() {
+
+	//注册路由 fixme 其他应用的路由，在本目录新建文件放在init方法
+	AppRouters = append(AppRouters, router.InitRouter)
+}
+
 //初始化操作
 func setup() {
 
@@ -54,8 +61,12 @@ func run()  {
 	//1. 初始化数据库
 	initDB()
 
-	//2.注册路由
+	//2.路由, 中间件配置
 	initRouters()
+
+	for _, f := range AppRouters {
+		f()
+	}
 
 	srv := &http.Server{
 		Addr:    fmt.Sprintf("%s:%d", config.ApplicationConfig.Host, config.ApplicationConfig.Port),
@@ -108,7 +119,7 @@ func initDB() {
 	if err != nil {
 		fmt.Println(err.Error())
 	}
-	defer db.Close()
+	//defer db.Close()
 
 	//设置全局数据库连接
 	runtime.App.SetDb(db)

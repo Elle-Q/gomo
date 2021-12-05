@@ -7,6 +7,7 @@ type User struct {
 	Name string
 	Phone string
 	QRCode string
+	Address string
 	Gender string
 	Vip bool
 	BgImag string
