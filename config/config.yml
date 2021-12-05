@@ -1,0 +1,37 @@
+
+# -------------------应用----------------------
+application:
+  mode: dev       #开发环境 dev  test  prod
+  host: 127.0.0.1
+  name: gomo-App
+  port: 8088
+  readtimeout: 1
+  writertimeout: 1
+
+# -------------------日志----------------------
+#logger:
+#  path: temp/logs
+#  stdout: ''
+#  level: trace
+#  enableddb: false      #数据库日志开关
+#
+# -------------------数据库----------------------
+database:
+  driver: postgres
+  username: elle
+  password: Ggg123654.
+  host: localhost
+  port: 5432
+  sslMode: disable
+  dbname: homo
+
+## -------------------缓存-------------------------
+## 缓存未引入
+#cache:
+##    redis:
+##      addr: 127.0.0.1:6379
+##      password: Ggg123654.
+##      db: 2
+## -------------------消息队列-------------------------
+##带调研选择消息队列
+#queue:
