@@ -1,4 +1,3 @@
-
 # -------------------应用----------------------
 application:
   mode: dev       #开发环境 dev  test  prod

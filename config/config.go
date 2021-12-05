@@ -34,4 +34,3 @@ func Setup(filePath string) {
 	}
 
 }
-
