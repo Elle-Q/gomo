@@ -12,6 +12,7 @@ type User struct {
 	Vip bool
 	BgImag string
 	Admin bool
+	Status string
 	CreateTime time.Time
 	UpdateTime time.Time
 

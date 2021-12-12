@@ -11,7 +11,7 @@ type CatHandler struct {
 
 func (h *CatHandler) List(list *[]models.Category) *CatHandler {
 
-	rows , err := h.DB.Query("select id, title, sub_title, preview, desp, create_time ,update_time from public.category")
+	rows , err := h.DB.Query("select id, title, sub_title, preview, desp, status, create_time ,update_time from public.category")
 
 	if err != nil {
 		_ = h.AddError(err)
@@ -21,7 +21,7 @@ func (h *CatHandler) List(list *[]models.Category) *CatHandler {
 
 	for rows.Next() {
 		cat := models.Category{}
-		err := rows.Scan(&cat.ID,&cat.Title,&cat.SubTitle,&cat.Preview,&cat.Desc,&cat.UpdateTime,&cat.CreateTime)
+		err := rows.Scan(&cat.ID,&cat.Title,&cat.SubTitle,&cat.Preview,&cat.Desc,&cat.Status,&cat.UpdateTime,&cat.CreateTime)
 		if err != nil {
 			_ = h.AddError(err)
 			return h

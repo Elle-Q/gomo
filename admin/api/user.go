@@ -38,7 +38,7 @@ func (e User) GetUser(ctx *gin.Context) {
 
 }
 
-func (e User) list(ctx *gin.Context) {
+func (e User) List(ctx *gin.Context) {
 	service := handlers.UserHandler{}
 	err := e.MakeContext(ctx).
 		MakeDB().
