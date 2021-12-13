@@ -17,7 +17,7 @@ func registerNoCheckRouter(g *gin.RouterGroup) {
 	category := g.Group("/category").Use(actions.PermissionAction())
 	{
 		category.GET("/list", _CatApi.List)
-		//r.GET("/:id", api.Get)
+		category.GET("/:id", _CatApi.Get)
 		//r.POST("", api.Insert)
 		//r.PUT("", api.Update)
 		//r.DELETE("", api.Delete)

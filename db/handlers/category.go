@@ -1,6 +1,7 @@
 package handlers
 
 import (
+	"gomo/app/service/dto"
 	"gomo/db"
 	"gomo/db/models"
 )
@@ -21,7 +22,13 @@ func (h *CatHandler) List(list *[]models.Category) *CatHandler {
 
 	for rows.Next() {
 		cat := models.Category{}
-		err := rows.Scan(&cat.ID,&cat.Title,&cat.SubTitle,&cat.Preview,&cat.Desc,&cat.UpdateTime,&cat.CreateTime)
+		err := rows.Scan(&cat.ID,
+			&cat.Title,
+			&cat.SubTitle,
+			&cat.Preview,
+			&cat.Desc,
+			&cat.UpdateTime,
+			&cat.CreateTime)
 		if err != nil {
 			_ = h.AddError(err)
 			return h
@@ -30,4 +37,23 @@ func (h *CatHandler) List(list *[]models.Category) *CatHandler {
 	}
 
 	return h
+}
+
+func (h *CatHandler) Get(req *dto.CatApiReq, cat *models.Category)  *CatHandler{
+
+	row := h.DB.QueryRow("select id, title, sub_title, preview, desp, create_time ,update_time from public.category where id=$1", req.GetId())
+
+	err := row.Scan(&cat.ID,
+		&cat.Title,
+		&cat.SubTitle,
+		&cat.Preview,
+		&cat.Desc,
+		&cat.UpdateTime,
+		&cat.CreateTime)
+	if err != nil {
+		_ = h.AddError(err)
+		return h
+	}
+	return h
+
 }
