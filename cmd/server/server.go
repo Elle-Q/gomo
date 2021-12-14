@@ -5,7 +5,7 @@ import (
 	"database/sql"
 	"fmt"
 	"github.com/gin-gonic/gin"
-	//_ "github.com/lib/pq"
+	_ "github.com/lib/pq"
 	"github.com/spf13/cobra"
 	adminRouter "gomo/admin/router"
 	appRouter "gomo/app/router"
@@ -63,7 +63,7 @@ func run()  {
 	runtime.App.SetEngine(gin.New())
 
 	//1. 初始化数据库
-	//initDB()
+	initDB()
 
 	//2.路由, 中间件配置
 	initRouters()

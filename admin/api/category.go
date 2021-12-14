@@ -43,7 +43,7 @@ func (e Category) Save(ctx *gin.Context) {
 	service := handlers.CatHandler{}
 	err := e.MakeContext(ctx).
 		MakeDB().
-		Bind(&req, binding.Form, binding.JSON, binding.FormMultipart).
+		Bind(&req, binding.Form, binding.FormMultipart).
 		MakeService(&service.Handler).
 		Errors
 

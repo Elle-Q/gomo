@@ -36,7 +36,9 @@ func (s *CatUpdateReq) Generate(model *models.Category) error{
 	}
 	model.Title = s.Title
 	model.SubTitle = s.SubTitle
-	model.Preview = s.Preview.Filename
+	if s.Preview != nil {
+		model.Preview = s.Preview.Filename
+	}
 	model.Desc = s.Desc
 	model.Status = s.Status
 	model.UpdateTime = time.Now()
