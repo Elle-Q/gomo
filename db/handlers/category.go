@@ -12,7 +12,7 @@ type CatHandler struct {
 
 func (h *CatHandler) List(list *[]models.Category) *CatHandler {
 
-	rows , err := h.DB.Query("select id, title, sub_title, preview, desp, create_time ,update_time from public.category")
+	rows , err := h.DB.Query("select id, title, sub_title, preview, desp, status, create_time ,update_time from public.category")
 
 	if err != nil {
 		_ = h.AddError(err)
@@ -27,6 +27,7 @@ func (h *CatHandler) List(list *[]models.Category) *CatHandler {
 			&cat.SubTitle,
 			&cat.Preview,
 			&cat.Desc,
+			&cat.Status,
 			&cat.UpdateTime,
 			&cat.CreateTime)
 		if err != nil {
@@ -39,9 +40,10 @@ func (h *CatHandler) List(list *[]models.Category) *CatHandler {
 	return h
 }
 
-func (h *CatHandler) Get(req *dto.CatApiReq, cat *models.Category)  *CatHandler{
+func (h *CatHandler) Get(req *dto.CatApiReq, cat *models.Category)  *CatHandler {
 
-	row := h.DB.QueryRow("select id, title, sub_title, preview, desp, create_time ,update_time from public.category where id=$1", req.GetId())
+	row := h.DB.QueryRow("select id, title, sub_title, preview, desp, create_time ,update_time from public.category where id=$1",
+		req.GetId())
 
 	err := row.Scan(&cat.ID,
 		&cat.Title,
@@ -55,5 +57,37 @@ func (h *CatHandler) Get(req *dto.CatApiReq, cat *models.Category)  *CatHandler{
 		return h
 	}
 	return h
-
 }
+
+func (h *CatHandler) Save(cat *models.Category) *CatHandler{
+	var sql string
+	var err error
+	if cat.ID == 0 {
+		sql = "insert into public.category(title, sub_title, preview, desp, status, update_time, create_time) values($1,$2,$3,$4,$5,$6,$7)"
+		_, err =h.DB.Exec(sql, &cat.Title,&cat.SubTitle,&cat.Preview,&cat.Desc,&cat.Status,cat.UpdateTime,cat.CreateTime)
+	} else {
+		sql = "update public.category set title=$1, sub_title=$2, preview=$3, desp=$4, status=$5, update_time=$6 where id = $7"
+		_, err =h.DB.Exec(sql, &cat.Title,&cat.SubTitle,&cat.Preview,&cat.Desc,&cat.Status,cat.UpdateTime,cat.ID)
+	}
+
+	if err != nil {
+		_ = h.AddError(err)
+		return h
+	}
+	return h
+}
+
+
+func (h *CatHandler) Delete(catIds []int) *CatHandler{
+	sql := "delete from public.category where id=$1"
+
+	_, err := h.DB.Exec(sql, catIds)
+
+	if err != nil {
+		_ = h.AddError(err)
+		return h
+	}
+	return h
+}
+
+

@@ -7,7 +7,8 @@ import (
 	"github.com/gin-gonic/gin"
 	//_ "github.com/lib/pq"
 	"github.com/spf13/cobra"
-	"gomo/app/router"
+	adminRouter "gomo/admin/router"
+	appRouter "gomo/app/router"
 	"gomo/common/global"
 	"gomo/common/middleware"
 	"gomo/common/runtime"
@@ -35,11 +36,14 @@ var (
 )
 
 var AppRouters = make([]func(), 0)
+var AdminRouters = make([]func(), 0)
 
 func init() {
 
 	//注册路由 fixme 其他应用的路由，在本目录新建文件放在init方法
-	AppRouters = append(AppRouters, router.InitRouter)
+	AppRouters = append(AppRouters, appRouter.InitAppRouter)
+
+	AdminRouters = append(AdminRouters, adminRouter.InitAdminRouter)
 }
 
 //初始化操作
@@ -65,6 +69,10 @@ func run()  {
 	initRouters()
 
 	for _, f := range AppRouters {
+		f()
+	}
+
+	for _, f := range AdminRouters {
 		f()
 	}
 

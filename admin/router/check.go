@@ -2,7 +2,7 @@ package router
 
 import (
 	"github.com/gin-gonic/gin"
-	"gomo/app/api"
+	"gomo/admin/api"
 	"gomo/common/actions"
 )
 
@@ -16,12 +16,18 @@ func registerCheckRouter(g *gin.RouterGroup) {
 	user := g.Group("/user").Use(actions.PermissionAction())
 	{
 		user.GET("/:id", _UserApi.GetUser)
-		user.GET("/register", _UserApi.AddUser)
-		//r.GET("/:id", api.Get)
+		user.GET("/list", _UserApi.List)
 		//r.POST("", api.Insert)
 		//r.PUT("", api.Update)
 		//r.DELETE("", api.Delete)
 	}
 
+	_CatApi := api.Category{}
+	cat := g.Group("/cat").Use(actions.PermissionAction())
+	{
+		//cat.GET("/:id", _UserApi.GetUser)
+		cat.GET("/list", _CatApi.List)
+		cat.POST("/update", _CatApi.Save)
+	}
 
 }

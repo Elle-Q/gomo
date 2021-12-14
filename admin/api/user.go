@@ -12,7 +12,6 @@ type User struct {
 	apis.Api
 }
 
-//查询用户信息
 func (e User) GetUser(ctx *gin.Context) {
 	req := dto.UserApiReq{}
 	service := handlers.UserHandler{}
@@ -39,14 +38,10 @@ func (e User) GetUser(ctx *gin.Context) {
 
 }
 
-// 用户信息编辑
-func (e User) AddUser(ctx *gin.Context) {
-
-	req := dto.UserUpdateApiReq{}
+func (e User) List(ctx *gin.Context) {
 	service := handlers.UserHandler{}
 	err := e.MakeContext(ctx).
 		MakeDB().
-		Bind(&req, nil).
 		MakeService(&service.Handler).
 		Errors
 
@@ -54,17 +49,15 @@ func (e User) AddUser(ctx *gin.Context) {
 		e.Error(500, err, err.Error())
 		return
 	}
-	user := req.Generate()
-	err = service.Update(&user).Error
+
+	list := make([]models.User, 0)
+
+	err = service.List(&list).Error
 	if err != nil {
 		e.Error(500, err, "fail")
 		return
 	}
 
-	e.OK(user, "ok")
-}
-
-//登录
-func (e User) Login(context *gin.Context) {
+	e.OK(list, "ok")
 
 }

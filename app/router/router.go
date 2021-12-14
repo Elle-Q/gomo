@@ -12,7 +12,7 @@ var (
 	routerCheckRole = make([]func(*gin.RouterGroup), 0)
 )
 
-func InitRouter()  {
+func InitAppRouter()  {
 	var r *gin.Engine
 	h := runtime.App.GetEngine()
 	if h == nil {
@@ -42,6 +42,10 @@ func noCheckRoleRouter(r *gin.Engine) {
 	v1 := r.Group("app")
 
 	for _,f := range routerNoCheckRole{
+		f(v1)
+	}
+
+	for _,f := range routerCheckRole{
 		f(v1)
 	}
 }
