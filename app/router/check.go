@@ -16,7 +16,8 @@ func registerCheckRouter(g *gin.RouterGroup) {
 	user := g.Group("/user").Use(actions.PermissionAction())
 	{
 		user.GET("/:id", _UserApi.GetUser)
-		user.GET("/register", _UserApi.AddUser)
+		user.GET("/update", _UserApi.UpdateUser)
+		user.GET("/login", _UserApi.UpdateUser)
 		//r.GET("/:id", api.Get)
 		//r.POST("", api.Insert)
 		//r.PUT("", api.Update)

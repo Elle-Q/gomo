@@ -29,7 +29,7 @@ func (e User) GetUser(ctx *gin.Context) {
 
 
 	var user models.User
-	err = service.Find(&req, &user).Error
+	err = service.FindById(&req, &user).Error
 	if err != nil {
 		e.Error(500, err, "fail")
 		return
@@ -40,7 +40,7 @@ func (e User) GetUser(ctx *gin.Context) {
 }
 
 // 用户信息编辑
-func (e User) AddUser(ctx *gin.Context) {
+func (e User) UpdateUser(ctx *gin.Context) {
 
 	req := dto.UserUpdateApiReq{}
 	service := handlers.UserHandler{}
@@ -65,6 +65,25 @@ func (e User) AddUser(ctx *gin.Context) {
 }
 
 //登录
-func (e User) Login(context *gin.Context) {
+func (e User) Login(ctx *gin.Context) {
+	req := dto.UserLoginApiReq{}
+	service := handlers.UserHandler{}
+	err := e.MakeContext(ctx).
+		MakeDB().
+		Bind(&req, nil).
+		MakeService(&service.Handler).
+		Errors
+
+	if err != nil {
+		e.Error(500, err, err.Error())
+		return
+	}
+	err = service.Login(&req).Error
+	if err != nil {
+		e.Error(500, err, "fail")
+		return
+	}
+
+	e.OK(user, "ok")
 
 }

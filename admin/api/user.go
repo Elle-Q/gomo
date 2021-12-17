@@ -28,7 +28,7 @@ func (e User) GetUser(ctx *gin.Context) {
 
 
 	var user models.User
-	err = service.Find(&req, &user).Error
+	err = service.FindById(&req, &user).Error
 	if err != nil {
 		e.Error(500, err, "fail")
 		return
