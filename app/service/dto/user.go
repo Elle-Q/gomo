@@ -34,3 +34,8 @@ func (u *UserUpdateApiReq) Generate() models.User{
 	user.UpdateTime=time.Now()
 	return user
 }
+
+type UserLoginApiReq struct {
+	UserName string `form:"UserName"`
+	Password string `form:"Password"`
+}
