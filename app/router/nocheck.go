@@ -23,9 +23,9 @@ func registerNoCheckRouter(g *gin.RouterGroup) {
 		//r.DELETE("", api.Delete)
 	}
 
-	_UserApi := api.User{}
-	user := g.Group("/user").Use(actions.PermissionAction())
-	{
-		user.GET("/login", _UserApi.Login)
-	}
+	//_UserApi := api.User{}
+	//user := g.Group("/user").Use(actions.PermissionAction())
+	//{
+	//	user.GET("/login", _UserApi.Login)
+	//}
 }

@@ -10,9 +10,9 @@ type UserHandler struct {
 	db.Handler
 }
 
-func (h *UserHandler) FindById(req *dto.UserApiReq, model *models.User) *UserHandler {
+func (h *UserHandler) FindById(id int, model *models.User) *UserHandler {
 
-	row := h.DB.QueryRow("select id, name, phone, qr_code,address,gender,vip,bg_imag,admin,status,update_time, create_time from public.user where id=$1", req.GetId())
+	row := h.DB.QueryRow("select id, name, phone, qr_code,address,gender,vip,bg_imag,admin,status,update_time, create_time from public.user where id=$1", id)
 
 	err := row.Scan(&model.ID,
 		&model.Name,
@@ -167,6 +167,3 @@ func (h *UserHandler) updateVip(vip bool, id int) *UserHandler{
 	return h
 }
 
-func (h *UserHandler) Login(u *dto.UserLoginApiReq) *UserHandler{
-
-}

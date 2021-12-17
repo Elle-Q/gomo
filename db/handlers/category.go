@@ -1,7 +1,6 @@
 package handlers
 
 import (
-	"gomo/app/service/dto"
 	"gomo/db"
 	"gomo/db/models"
 )
@@ -40,10 +39,10 @@ func (h *CatHandler) List(list *[]models.Category) *CatHandler {
 	return h
 }
 
-func (h *CatHandler) Get(req *dto.CatApiReq, cat *models.Category)  *CatHandler {
+func (h *CatHandler) Get(id int, cat *models.Category)  *CatHandler {
 
 	row := h.DB.QueryRow("select id, title, sub_title, preview, desp, create_time ,update_time from public.category where id=$1",
-		req.GetId())
+		id)
 
 	err := row.Scan(&cat.ID,
 		&cat.Title,
