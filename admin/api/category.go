@@ -68,3 +68,27 @@ func (e Category) Save(ctx *gin.Context) {
 	e.OK(Cat.ID, "ok")
 
 }
+
+//删除分类
+func (e Category) Delete(ctx *gin.Context) {
+	req := dto.CatDeleteApiReq{}
+	service := handlers.CatHandler{}
+	err := e.MakeContext(ctx).
+		MakeDB().
+		Bind(&req).
+		MakeService(&service.Handler).
+		Errors
+
+	if err != nil {
+		e.Error(500, err, err.Error())
+		return
+	}
+
+	err = service.Delete(req.GetId()).Error
+	if err != nil {
+		e.Error(500, err, "fail")
+		return
+	}
+
+	e.OK(req.GetId(),"ok")
+}
