@@ -39,3 +39,7 @@ type UserLoginApiReq struct {
 	UserName string `form:"UserName"`
 	Password string `form:"Password"`
 }
+
+type UserTokenRefreshApiReq struct {
+	RefreshToken string `form:"RefreshToken"`
+}

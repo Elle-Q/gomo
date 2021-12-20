@@ -167,6 +167,14 @@ func (h *UserHandler) updateVip(vip bool, id int) *UserHandler{
 	return h
 }
 
-func (h *UserHandler) Login(u *dto.UserLoginApiReq) *UserHandler{
 
+func (h *UserHandler) GetUserByPhone(u *dto.UserLoginApiReq, userId *int) *UserHandler{
+	sql := "select id from public.user where phone=$1"
+	row := h.DB.QueryRow(sql, u.UserName)
+	err := row.Scan(userId)
+	if err != nil {
+		_ = h.AddError(err)
+		return h
+	}
+	return h
 }

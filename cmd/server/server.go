@@ -5,6 +5,7 @@ import (
 	"database/sql"
 	"fmt"
 	"github.com/gin-gonic/gin"
+	"github.com/go-redis/redis/v7"
 	_ "github.com/lib/pq"
 	"github.com/spf13/cobra"
 	adminRouter "gomo/admin/router"
@@ -63,9 +64,12 @@ func run()  {
 	runtime.App.SetEngine(gin.New())
 
 	//1. 初始化数据库
-	initDB()
+	//initDB()
 
-	//2.路由, 中间件配置
+	//3. 初始化redis
+	//initRedis()
+
+	//3.路由, 中间件配置
 	initRouters()
 
 	for _, f := range AppRouters {
@@ -138,6 +142,32 @@ func initDB() {
 	}
 }
 
+//初始化redis
+func initRedis() {
+	_cfg := config.RedisConfig
+
+	//Initializing redis
+	dsn := os.Getenv("REDIS_DSN")
+	if len(dsn) == 0 {
+		dsn = "localhost:6379"
+	}
+	client := redis.NewClient(&redis.Options{
+		Addr: _cfg.Address,
+		Password: _cfg.Password,
+		DB: _cfg.DB,
+	})
+
+	//设置全局
+	runtime.App.SetRedis(client)
+
+
+	_, err := client.Ping().Result()
+	if err != nil {
+		panic(err)
+	}
+}
+
+//初始化路由
 func initRouters() {
 	var r *gin.Engine
 	h := runtime.App.GetEngine()
