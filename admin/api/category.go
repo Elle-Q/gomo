@@ -4,8 +4,8 @@ import (
 	"github.com/gin-gonic/gin"
 	"github.com/gin-gonic/gin/binding"
 	"gomo/admin/service/dto"
+	"gomo/app/service"
 	"gomo/common/apis"
-	"gomo/db/handlers"
 	"gomo/db/models"
 )
 
@@ -14,10 +14,10 @@ type Category struct {
 }
 
 func (e Category) List(ctx *gin.Context) {
-	service := handlers.CatHandler{}
+	service := service.CategoryService{}
 	err := e.MakeContext(ctx).
 		MakeDB().
-		MakeService(&service.Handler).
+		MakeService(&service.CatHandler.Handler).
 		Errors
 
 	if err != nil {
@@ -40,11 +40,11 @@ func (e Category) List(ctx *gin.Context) {
 
 func (e Category) Save(ctx *gin.Context) {
 	req := dto.CatUpdateReq{}
-	service := handlers.CatHandler{}
+	service := service.CategoryService{}
 	err := e.MakeContext(ctx).
 		MakeDB().
 		Bind(&req, binding.Form, binding.FormMultipart).
-		MakeService(&service.Handler).
+		MakeService(&service.CatHandler.Handler).
 		Errors
 
 	if err != nil {
@@ -67,4 +67,28 @@ func (e Category) Save(ctx *gin.Context) {
 
 	e.OK(Cat.ID, "ok")
 
+}
+
+//删除分类
+func (e Category) Delete(ctx *gin.Context) {
+	req := dto.CatDeleteApiReq{}
+	service := service.CategoryService{}
+	err := e.MakeContext(ctx).
+		MakeDB().
+		Bind(&req).
+		MakeService(&service.CatHandler.Handler).
+		Errors
+
+	if err != nil {
+		e.Error(500, err, err.Error())
+		return
+	}
+
+	err = service.Delete(req.GetId()).Error
+	if err != nil {
+		e.Error(500, err, "fail")
+		return
+	}
+
+	e.OK(req.GetId(),"ok")
 }

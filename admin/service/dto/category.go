@@ -53,3 +53,12 @@ func (s *CatUpdateReq) check() error{
 	}
 	return nil
 }
+
+
+type CatDeleteApiReq struct {
+	ID int `json:"id"`
+}
+
+func (s *CatDeleteApiReq) GetId() int {
+	return s.ID
+}

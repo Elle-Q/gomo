@@ -29,4 +29,5 @@ func registerNoCheckRouter(g *gin.RouterGroup) {
 		user.GET("/login", _UserApi.Login)
 		user.GET("/refresh", _UserApi.Refresh)
 	}
+
 }
