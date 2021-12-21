@@ -23,6 +23,7 @@ func (h *UserHandler) Find(req *dto.UserApiReq, model *models.User) *UserHandler
 		&model.Vip,
 		&model.BgImag,
 		&model.Admin,
+		&model.Status,
 		&model.UpdateTime,
 		&model.CreateTime,
 	)
