@@ -2,9 +2,9 @@ package api
 
 import (
 	"github.com/gin-gonic/gin"
+	"gomo/app/service"
 	"gomo/app/service/dto"
 	"gomo/common/apis"
-	"gomo/db/handlers"
 	"gomo/db/models"
 )
 
@@ -13,10 +13,10 @@ type Category struct {
 }
 
 func (e Category) List(ctx *gin.Context) {
-	service := handlers.CatHandler{}
+	service :=service.CategoryService{}
 	err := e.MakeContext(ctx).
 		MakeDB().
-		MakeService(&service.Handler).
+		MakeService(&service.CatHandler.Handler).
 		Errors
 
 	if err != nil {
@@ -38,11 +38,11 @@ func (e Category) List(ctx *gin.Context) {
 
 func (e Category) Get(ctx *gin.Context) {
 	req := dto.CatApiReq{}
-	service := handlers.CatHandler{}
+	service :=service.CategoryService{}
 	err := e.MakeContext(ctx).
 		MakeDB().
 		Bind(&req).
-		MakeService(&service.Handler).
+		MakeService(&service.CatHandler.Handler).
 		Errors
 
 	if err != nil {

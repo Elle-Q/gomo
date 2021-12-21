@@ -2,9 +2,9 @@ package api
 
 import (
 	"github.com/gin-gonic/gin"
+	"gomo/admin/service"
 	"gomo/app/service/dto"
 	"gomo/common/apis"
-	"gomo/db/handlers"
 	"gomo/db/models"
 )
 
@@ -14,11 +14,11 @@ type User struct {
 
 func (e User) GetUser(ctx *gin.Context) {
 	req := dto.UserApiReq{}
-	service := handlers.UserHandler{}
+	service := service.UserService{}
 	err := e.MakeContext(ctx).
 			MakeDB().
 			Bind(&req, nil).
-			MakeService(&service.Handler).
+			MakeService(&service.UserHandler.Handler).
 			Errors
 
 	if err != nil {
@@ -28,7 +28,7 @@ func (e User) GetUser(ctx *gin.Context) {
 
 
 	var user models.User
-	err = service.Find(&req, &user).Error
+	err = service.FindById(&req, &user).Error
 	if err != nil {
 		e.Error(500, err, "fail")
 		return
@@ -39,10 +39,10 @@ func (e User) GetUser(ctx *gin.Context) {
 }
 
 func (e User) List(ctx *gin.Context) {
-	service := handlers.UserHandler{}
+	service := service.UserService{}
 	err := e.MakeContext(ctx).
 		MakeDB().
-		MakeService(&service.Handler).
+		MakeService(&service.UserHandler.Handler).
 		Errors
 
 	if err != nil {

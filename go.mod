@@ -1,7 +1,10 @@
 module gomo
 
 require (
+	github.com/dgrijalva/jwt-go v3.2.0+incompatible
 	github.com/gin-gonic/gin v1.7.7
+	github.com/go-redis/redis/v7 v7.4.1
+	github.com/google/uuid v1.3.0
 	github.com/lib/pq v1.10.4
 	github.com/spf13/cobra v1.2.1
 	gopkg.in/yaml.v3 v3.0.0-20210107192922-496545a6307b

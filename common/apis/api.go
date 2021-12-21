@@ -48,7 +48,7 @@ func (e *Api) MakeDB() *Api{
 	return e
 }
 
-func (e *Api) MakeService(handler * db.Handler) *Api {
+func (e *Api) MakeService(handler *db.Handler) *Api {
 	handler.DB = e.DB
 	return e
 }

@@ -3,17 +3,19 @@ package runtime
 import (
 	"database/sql"
 	"github.com/gin-gonic/gin"
+	"github.com/go-redis/redis/v7"
 	"net/http"
 	"sync"
 )
 
 type Application struct {
-	db         *sql.DB
+	db          *sql.DB
 	engine      http.Handler
 	mux         sync.RWMutex
 	middlewares map[string]interface{}
 	handler     map[string][]func(r *gin.RouterGroup, hand ...*gin.HandlerFunc)
 	routers     []Router
+	redis       *redis.Client
 }
 
 type Router struct {
@@ -36,6 +38,20 @@ func (e *Application) GetDb() *sql.DB {
 	e.mux.Lock()
 	defer e.mux.Unlock()
 	return e.db
+}
+
+// SetRedis 设置redis
+func (e *Application) SetRedis(redis *redis.Client) {
+	e.mux.Lock()
+	defer e.mux.Unlock()
+	e.redis = redis
+}
+
+// GetRedis 获取redis
+func (e *Application) GetRedis() *redis.Client {
+	e.mux.Lock()
+	defer e.mux.Unlock()
+	return e.redis
 }
 
 // SetEngine 设置路由引擎
@@ -65,9 +81,8 @@ func (e *Application) setRouter() []Router {
 	return e.routers
 }
 
-
 // SetMiddleware 设置中间件
-func (e *Application) SetMiddleware(key string, middleware interface{})  {
+func (e *Application) SetMiddleware(key string, middleware interface{}) {
 	e.mux.Lock()
 	defer e.mux.Unlock()
 	e.middlewares[key] = middleware
@@ -103,13 +118,12 @@ func (e *Application) GetHandlerPrefix(key string) []func(r *gin.RouterGroup, ha
 	return e.handler[key]
 }
 
-func NewConfig() *Application   {
+func NewConfig() *Application {
 	return &Application{
 		middlewares: make(map[string]interface{}),
 		handler:     make(map[string][]func(r *gin.RouterGroup, hand ...*gin.HandlerFunc)),
 		routers:     make([]Router, 0),
 	}
 }
-
 
 var App Runtime = NewConfig()

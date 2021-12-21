@@ -11,8 +11,9 @@ import (
 type Config struct {
 	Application *Application
 	Database    *Database
+	JWT  *JWT
+	Redis *Redis
 	//Logger      *Logger
-	//Cache       *Cache
 	//Queue       *Queue
 }
 
@@ -21,6 +22,8 @@ func Setup(filePath string) {
 	_cfg := Config{
 		ApplicationConfig,
 		DatabaseConfig,
+		JWTConfig,
+		RedisConfig,
 	}
 
 	ymlData, err := ioutil.ReadFile(filePath)
