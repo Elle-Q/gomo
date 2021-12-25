@@ -47,6 +47,6 @@ jwt:
 
 # -------------------redis缓存-------------------------
 redis:
-  address: 127.0.0.1:6379
-  password: Ggg123654.
+  address: 192.168.230.101:6379
+  password: quxiaoyu
   db: 2

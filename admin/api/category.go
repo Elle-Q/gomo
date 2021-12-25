@@ -4,8 +4,8 @@ import (
 	"github.com/gin-gonic/gin"
 	"github.com/gin-gonic/gin/binding"
 	"gomo/admin/service/dto"
-	"gomo/app/service"
 	"gomo/common/apis"
+	"gomo/db/handlers"
 	"gomo/db/models"
 )
 
@@ -14,10 +14,10 @@ type Category struct {
 }
 
 func (e Category) List(ctx *gin.Context) {
-	service := service.CategoryService{}
+	service := handlers.CatHandler{}
 	err := e.MakeContext(ctx).
 		MakeDB().
-		MakeService(&service.CatHandler.Handler).
+		MakeService(&service.Handler).
 		Errors
 
 	if err != nil {
@@ -40,11 +40,11 @@ func (e Category) List(ctx *gin.Context) {
 
 func (e Category) Save(ctx *gin.Context) {
 	req := dto.CatUpdateReq{}
-	service := service.CategoryService{}
+	service := handlers.CatHandler{}
 	err := e.MakeContext(ctx).
 		MakeDB().
 		Bind(&req, binding.Form, binding.FormMultipart).
-		MakeService(&service.CatHandler.Handler).
+		MakeService(&service.Handler).
 		Errors
 
 	if err != nil {
@@ -72,11 +72,11 @@ func (e Category) Save(ctx *gin.Context) {
 //删除分类
 func (e Category) Delete(ctx *gin.Context) {
 	req := dto.CatDeleteApiReq{}
-	service := service.CategoryService{}
+	service := handlers.CatHandler{}
 	err := e.MakeContext(ctx).
 		MakeDB().
 		Bind(&req).
-		MakeService(&service.CatHandler.Handler).
+		MakeService(&service.Handler).
 		Errors
 
 	if err != nil {

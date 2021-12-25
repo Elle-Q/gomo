@@ -4,11 +4,11 @@ import (
 	"fmt"
 	"github.com/dgrijalva/jwt-go"
 	"github.com/gin-gonic/gin"
-	"gomo/app/service"
 	"gomo/app/service/dto"
 	"gomo/auth"
 	"gomo/common/apis"
 	"gomo/config"
+	"gomo/db/handlers"
 	"gomo/db/models"
 	"net/http"
 	"strconv"
@@ -21,11 +21,11 @@ type User struct {
 //查询用户信息
 func (e User) GetUser(ctx *gin.Context) {
 	req := dto.UserApiReq{}
-	service := service.UserService{}
+	service := handlers.UserHandler{}
 	err := e.MakeContext(ctx).
 			MakeDB().
 			Bind(&req, nil).
-			MakeService(&service.UserHandler.Handler).
+			MakeService(&service.Handler).
 			Errors
 
 	if err != nil {
@@ -35,7 +35,7 @@ func (e User) GetUser(ctx *gin.Context) {
 
 
 	var user models.User
-	err = service.FindById(&req, &user).Error
+	err = service.FindById(req.GetId(), &user).Error
 	if err != nil {
 		e.Error(500, err, "fail")
 		return
@@ -49,11 +49,11 @@ func (e User) GetUser(ctx *gin.Context) {
 func (e User) UpdateUser(ctx *gin.Context) {
 
 	req := dto.UserUpdateApiReq{}
-	service := service.UserService{}
+	service := handlers.UserHandler{}
 	err := e.MakeContext(ctx).
 		MakeDB().
 		Bind(&req, nil).
-		MakeService(&service.UserHandler.Handler).
+		MakeService(&service.Handler).
 		Errors
 
 	if err != nil {
@@ -73,11 +73,11 @@ func (e User) UpdateUser(ctx *gin.Context) {
 //登录
 func (e User) Login(ctx *gin.Context) {
 	req := dto.UserLoginApiReq{}
-	service := service.UserService{}
+	service := handlers.UserHandler{}
 	err := e.MakeContext(ctx).
 		MakeDB().
 		Bind(&req, nil).
-		MakeService(&service.UserHandler.Handler).
+		MakeService(&service.Handler).
 		Errors
 
 	if err != nil {
@@ -101,11 +101,11 @@ func (e User) Login(ctx *gin.Context) {
 		return
 	}
 
-	//saveErr := auth.CreateAuth(2, token)
-	//if saveErr != nil {
-	//	e.Error(500, saveErr, saveErr.Error())
-	//	return
-	//}
+	saveErr := auth.CreateAuth(2, token)
+	if saveErr != nil {
+		e.Error(500, saveErr, saveErr.Error())
+		return
+	}
 
 	tokens := map[string]string{
 		"access_token":  token.AccessToken,

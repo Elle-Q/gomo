@@ -61,14 +61,13 @@ func CreateAuth(userid uint64, tokens *Tokens) error {
 	now := time.Now()
 
 	client := runtime.App.GetRedis()
-	errAccess := client.Set(tokens.AccessUuid, strconv.Itoa(int(userid)), at.Sub(now))
-	if errAccess != nil {
-		return errAccess.Err()
+	_, err := client.Set(tokens.AccessUuid, strconv.Itoa(int(userid)), at.Sub(now)).Result()
+	if err != nil {
+		return err
 	}
-
-	errRefresh  := client.Set(tokens.RefreshUuid, strconv.Itoa(int(userid)), rt.Sub(now))
-	if errAccess != nil {
-		return errRefresh .Err()
+	_, err = client.Set(tokens.RefreshUuid, strconv.Itoa(int(userid)), rt.Sub(now)).Result()
+	if err != nil {
+		return err
 	}
 
 	return nil

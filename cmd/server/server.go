@@ -64,10 +64,10 @@ func run()  {
 	runtime.App.SetEngine(gin.New())
 
 	//1. 初始化数据库
-	//initDB()
+	initDB()
 
 	//3. 初始化redis
-	//initRedis()
+	initRedis()
 
 	//3.路由, 中间件配置
 	initRouters()
@@ -147,10 +147,7 @@ func initRedis() {
 	_cfg := config.RedisConfig
 
 	//Initializing redis
-	dsn := os.Getenv("REDIS_DSN")
-	if len(dsn) == 0 {
-		dsn = "localhost:6379"
-	}
+
 	client := redis.NewClient(&redis.Options{
 		Addr: _cfg.Address,
 		Password: _cfg.Password,
