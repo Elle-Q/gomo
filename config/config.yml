@@ -57,4 +57,4 @@ qiniu:
   AK: WhRnhuuljtU1hBNKbBLkkX2T-ymTLTDs_pC7PSn4
   #SecretKey
   SK: KN9UTKLC7HKt2QMy4u7l8XSvEgLBJcy9CTtUfVTI
-  BUCKET:
+  BUCKET: pub-img01

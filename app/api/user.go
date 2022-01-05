@@ -11,6 +11,7 @@ import (
 	"gomo/config"
 	"gomo/db/handlers"
 	"gomo/db/models"
+	"gomo/qiniu"
 	"net/http"
 	"strconv"
 )
@@ -71,6 +72,32 @@ func (e User) UpdateUser(ctx *gin.Context) {
 	e.OK(user, "ok")
 }
 
+// 修改头像
+func (e User) UpdateUserAvatar(ctx *gin.Context) {
+	req := dto.UserUpdateAvatarApiReq{}
+	service := handlers.UserHandler{}
+	err := e.MakeContext(ctx).
+		MakeDB().
+		Bind(&req, binding.Form, binding.FormMultipart).
+		MakeService(&service.Handler).
+		Errors
+
+	if err != nil {
+		e.Error(500, err, err.Error())
+		return
+	}
+	//upload avata to qiniu
+	file, err := req.Avatar.Open()
+	qiniu.UploadFile(file, req.Avatar.Filename)
+	user := req.Generate()
+	err = service.Update(&user).Error
+	if err != nil {
+		e.Error(500, err, "fail")
+		return
+	}
+
+	e.OK(user, "ok")
+}
 //登录
 func (e User) Login(ctx *gin.Context) {
 	req := dto.UserLoginApiReq{}
@@ -87,22 +114,22 @@ func (e User) Login(ctx *gin.Context) {
 	}
 
 	//check if exist
-	//var userId int
-	//err = service.GetUserByPhone(&req, &userId).Error
-	//if err != nil {
-	//	e.Error(500, err, "user is not exist!")
-	//	return
-	//}
+	var userId int
+	err = service.GetUserByPhone(&req, &userId).Error
+	if err != nil {
+		e.Error(500, err, "user is not exist!")
+		return
+	}
 
 	//create auth token
-	token, err := auth.CreateToken(2)
+	token, err := auth.CreateToken(userId)
 
 	if err != nil {
 		e.Error(500, err, err.Error())
 		return
 	}
 
-	saveErr := auth.CreateAuth(2, token)
+	saveErr := auth.CreateAuth(uint64(userId), token)
 	if saveErr != nil {
 		e.Error(500, saveErr, saveErr.Error())
 		return

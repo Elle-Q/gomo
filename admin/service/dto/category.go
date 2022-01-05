@@ -16,12 +16,12 @@ func (s *CatApiReq) GetId() int {
 }
 
 type CatUpdateReq struct {
-	ID       int    `form:"ID" comment:"id"`        // 编码
-	Title    string `json:"Title" comment:"标题"`     //菜单name
-	SubTitle string `form:"SubTitle" comment:"副标题"` //菜单name
-	Preview  *multipart.FileHeader  `form:"Preview" comment:"主图"`   //菜单name
-	Desc     string `form:"Desc" comment:"描述"`      //菜单name
-	Status   string `form:"Status" comment:"状态"`    //菜单name
+	ID       int    `form:"ID" comment:"id"`        // id
+	Title    string `form:"Title" comment:"标题"`     //标题
+	SubTitle string `form:"SubTitle" comment:"副标题"` //副标题
+	Preview  *multipart.FileHeader  `form:"Preview" comment:"主图"`   //主图
+	Desc     string `form:"Desc" comment:"描述"`      //描述
+	Status   string `form:"Status" comment:"状态"`    //状态
 }
 
 func (s *CatUpdateReq) Generate(model *models.Category) error{

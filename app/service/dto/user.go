@@ -19,8 +19,8 @@ type UserUpdateApiReq struct {
 	Name string `form:"Name"`
 	Address string `form:"Address"`
 	Gender string `form:"Gender"`
-	Avatar  *multipart.FileHeader  `form:"Avatar" comment:"头像"`
-	BgImag  *multipart.FileHeader  `form:"BgImag" comment:"背景"`
+	//Avatar  *multipart.FileHeader  `form:"Avatar" comment:"头像"`
+	//BgImag  *multipart.FileHeader  `form:"BgImag" comment:"背景"`
 }
 
 func (u *UserUpdateApiReq) Generate() models.User{
@@ -29,8 +29,8 @@ func (u *UserUpdateApiReq) Generate() models.User{
 	user.Name = u.Name
 	user.Address = u.Address
 	user.Gender = u.Gender
-	user.Avatar = u.Avatar.Filename
-	user.BgImag = u.BgImag.Filename
+	//user.Avatar = u.Avatar.Filename
+	//user.BgImag = u.BgImag.Filename
 	user.UpdateTime=time.Now()
 	return user
 }
@@ -42,4 +42,14 @@ type UserLoginApiReq struct {
 
 type UserTokenRefreshApiReq struct {
 	RefreshToken string `form:"RefreshToken"`
+}
+
+type UserUpdateAvatarApiReq struct {
+	Id int `form:"id"`
+	Avatar  *multipart.FileHeader  `form:"Avatar" comment:"头像"`
+}
+
+type UserUpdateBGApiReq struct {
+	Id int `form:"id"`
+	BgImag  *multipart.FileHeader  `form:"BgImag" comment:"背景"`
 }

@@ -13,6 +13,7 @@ type Config struct {
 	Database    *Database
 	JWT  *JWT
 	Redis *Redis
+	Qiniu *Qiniu
 	//Logger      *Logger
 	//Queue       *Queue
 }
@@ -24,6 +25,7 @@ func Setup(filePath string) {
 		DatabaseConfig,
 		JWTConfig,
 		RedisConfig,
+		QiniuConfig,
 	}
 
 	ymlData, err := ioutil.ReadFile(filePath)
