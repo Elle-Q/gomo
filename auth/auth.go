@@ -20,7 +20,7 @@ type Tokens struct {
 
 func CreateToken(ID int) (*Tokens,error) {
 	tokens := &Tokens{}
-	tokens.AtExpires = time.Now().Add(time.Minute * 15).Unix()
+	tokens.AtExpires = time.Now().Add(time.Minute * 1).Unix()
 	tokens.AccessUuid = uuid.New().String()
 
 	tokens.RtExpires = time.Now().Add(time.Hour * 24 * 7).Unix()
@@ -44,7 +44,7 @@ func CreateToken(ID int) (*Tokens,error) {
 	rtClaims := jwt.MapClaims{}
 	rtClaims["refresh_uuid"] = tokens.AccessUuid
 	rtClaims["user_id"] = ID
-	rtClaims["exp"] = tokens.AtExpires
+	rtClaims["exp"] = tokens.RtExpires
 	rt := jwt.NewWithClaims(jwt.SigningMethodHS256, rtClaims)
 	tokens.RefreshToken, err = rt.SignedString([]byte(config.JWTConfig.RefreshSecret))
 	if err != nil {

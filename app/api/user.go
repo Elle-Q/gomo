@@ -4,6 +4,7 @@ import (
 	"fmt"
 	"github.com/dgrijalva/jwt-go"
 	"github.com/gin-gonic/gin"
+	"github.com/gin-gonic/gin/binding"
 	"gomo/app/service/dto"
 	"gomo/auth"
 	"gomo/common/apis"
@@ -76,7 +77,7 @@ func (e User) Login(ctx *gin.Context) {
 	service := handlers.UserHandler{}
 	err := e.MakeContext(ctx).
 		MakeDB().
-		Bind(&req, nil).
+		Bind(&req, binding.JSON).
 		MakeService(&service.Handler).
 		Errors
 
@@ -108,8 +109,8 @@ func (e User) Login(ctx *gin.Context) {
 	}
 
 	tokens := map[string]string{
-		"access_token":  token.AccessToken,
-		"refresh_token": token.RefreshToken,
+		"AccessToken":  token.AccessToken,
+		"RefreshToken": token.RefreshToken,
 	}
 	e.OK(tokens, "ok")
 
@@ -135,7 +136,7 @@ func (e User) Refresh(ctx *gin.Context) {
 	req := dto.UserTokenRefreshApiReq{}
 	err := e.MakeContext(ctx).
 		MakeDB().
-		Bind(&req, nil).
+		Bind(&req, binding.JSON).
 		Errors
 
 	if err != nil {
@@ -171,7 +172,7 @@ func (e User) Refresh(ctx *gin.Context) {
 		}
 		//Delete the previous Refresh Token
 		deleted, delErr := auth.DeleteAuth(refreshUuid)
-		if delErr != nil || deleted == 0 {
+		if delErr != nil || deleted != 0 {
 			e.Error(http.StatusUnauthorized, delErr, "unauthorized")
 			return
 		}
@@ -188,8 +189,8 @@ func (e User) Refresh(ctx *gin.Context) {
 			return
 		}
 		tokens := map[string]string{
-			"access_token":  ts.AccessToken,
-			"refresh_token": ts.RefreshToken,
+			"AccessToken":  ts.AccessToken,
+			"RefreshToken": ts.RefreshToken,
 		}
 		e.OK(tokens, "refresh success")
 	} else {

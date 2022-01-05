@@ -26,8 +26,8 @@ func registerNoCheckRouter(g *gin.RouterGroup) {
 	_UserApi := api.User{}
 	user := g.Group("/user").Use(actions.PermissionAction())
 	{
-		user.GET("/login", _UserApi.Login)
-		user.GET("/refresh", _UserApi.Refresh)
+		user.POST("/login", _UserApi.Login)
+		user.POST("/refresh", _UserApi.Refresh)
 	}
 
 }

@@ -50,3 +50,11 @@ redis:
   address: 192.168.230.101:6379
   password: quxiaoyu
   db: 2
+
+# ----------------------七牛云----------------------
+qiniu:
+  #AccessKey
+  AK: WhRnhuuljtU1hBNKbBLkkX2T-ymTLTDs_pC7PSn4
+  #SecretKey
+  SK: KN9UTKLC7HKt2QMy4u7l8XSvEgLBJcy9CTtUfVTI
+  BUCKET:

@@ -3,7 +3,7 @@ package router
 import (
 	"github.com/gin-gonic/gin"
 	"gomo/admin/api"
-	"gomo/common/actions"
+	"gomo/common/middleware"
 )
 
 func init()  {
@@ -13,7 +13,7 @@ func init()  {
 func registerCheckRouter(g *gin.RouterGroup) {
 
 	_UserApi := api.User{}
-	user := g.Group("/user").Use(actions.PermissionAction())
+	user := g.Group("/user").Use(middleware.AuthJWTMiddleware())
 	{
 		user.GET("/:id", _UserApi.GetUser)
 		user.GET("/list", _UserApi.List)
@@ -23,7 +23,7 @@ func registerCheckRouter(g *gin.RouterGroup) {
 	}
 
 	_CatApi := api.Category{}
-	cat := g.Group("/cat").Use(actions.PermissionAction())
+	cat := g.Group("/cat").Use(middleware.AuthJWTMiddleware())
 	{
 		//cat.GET("/:id", _UserApi.GetUser)
 		cat.GET("/list", _CatApi.List)
