@@ -17,6 +17,7 @@ func registerCheckRouter(g *gin.RouterGroup) {
 	{
 		user.GET("/:id", _UserApi.GetUser)
 		user.GET("/update", _UserApi.UpdateUser)
+		user.POST("/avatar/update", _UserApi.UpdateUserAvatar)
 		user.GET("/logout", _UserApi.Logout)
 		//r.GET("/:id", api.Get)
 		//r.POST("", api.Insert)

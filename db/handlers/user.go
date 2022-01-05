@@ -179,3 +179,15 @@ func (h *UserHandler) GetUserByPhone(u *dto.UserLoginApiReq, userId *int) *UserH
 	}
 	return h
 }
+
+//更新用户头像
+func (h *UserHandler) UpdateAvatar(id int, link string) *UserHandler {
+	sql := "update public.user set avatar= $1 where id=$2"
+	_, err := h.DB.Exec(sql,link, id)
+
+	if err != nil {
+		_ = h.AddError(err)
+		return h
+	}
+	return h
+}

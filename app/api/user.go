@@ -25,16 +25,15 @@ func (e User) GetUser(ctx *gin.Context) {
 	req := dto.UserApiReq{}
 	service := handlers.UserHandler{}
 	err := e.MakeContext(ctx).
-			MakeDB().
-			Bind(&req, nil).
-			MakeService(&service.Handler).
-			Errors
+		MakeDB().
+		Bind(&req, nil).
+		MakeService(&service.Handler).
+		Errors
 
 	if err != nil {
 		e.Error(500, err, err.Error())
 		return
 	}
-
 
 	var user models.User
 	err = service.FindById(req.GetId(), &user).Error
@@ -88,16 +87,17 @@ func (e User) UpdateUserAvatar(ctx *gin.Context) {
 	}
 	//upload avata to qiniu
 	file, err := req.Avatar.Open()
-	qiniu.UploadFile(file, req.Avatar.Filename)
-	user := req.Generate()
-	err = service.Update(&user).Error
+	link := qiniu.UploadFile(file, req.Avatar.Filename)
+
+	err = service.UpdateAvatar(req.Id, link).Error
 	if err != nil {
 		e.Error(500, err, "fail")
 		return
 	}
 
-	e.OK(user, "ok")
+	e.OK(link, "ok")
 }
+
 //登录
 func (e User) Login(ctx *gin.Context) {
 	req := dto.UserLoginApiReq{}
@@ -205,12 +205,12 @@ func (e User) Refresh(ctx *gin.Context) {
 		}
 		//Create new pairs of refresh and access tokens
 		ts, createErr := auth.CreateToken(int(userId))
-		if  createErr != nil {
+		if createErr != nil {
 			e.Error(http.StatusForbidden, createErr, "StatusForbidden")
 			return
 		}
 		//save the tokens metadata to redis
-		saveErr :=  auth.CreateAuth(userId, ts)
+		saveErr := auth.CreateAuth(userId, ts)
 		if saveErr != nil {
 			e.Error(http.StatusForbidden, saveErr, "StatusForbidden")
 			return

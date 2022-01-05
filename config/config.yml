@@ -15,7 +15,6 @@ application:
 #  enableddb: false      #数据库日志开关
 #
 
-
 # -------------------数据库----------------------
 database:
   driver: postgres
@@ -25,17 +24,6 @@ database:
   port: 5432
   sslMode: disable
   dbname: homo
-
-## -------------------缓存-------------------------
-## 缓存未引入
-#cache:
-##    redis:
-##      addr: 127.0.0.1:6379
-##      password: Ggg123654.
-##      db: 2
-## -------------------消息队列-------------------------
-##带调研选择消息队列
-#queue:
 
 # -------------------jwt-------------------------
 jwt:
@@ -53,6 +41,7 @@ redis:
 
 # ----------------------七牛云----------------------
 qiniu:
+  PubDomain: http://pub.gomolog.com
   #AccessKey
   AK: WhRnhuuljtU1hBNKbBLkkX2T-ymTLTDs_pC7PSn4
   #SecretKey
