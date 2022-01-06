@@ -15,7 +15,7 @@ import (
 
 func UploadLocal(filePath string, fileName string) {
 	//get upToken
-	upToken := getToken()
+	upToken := GetToken()
 
 	//make key (timestamp)
 	key := strconv.FormatInt(time.Now().UnixMilli(), 10) + "/" +
@@ -47,7 +47,7 @@ func UploadFile(file multipart.File, fileName string) (link string){
 	fileSize := getFileSize(file)
 
 	//get upToken
-	upToken := getToken()
+	upToken := GetToken()
 
 	//make key (timestamp)
 	key := strconv.FormatInt(time.Now().UnixMilli(), 10) + "/" + fileName
@@ -76,7 +76,7 @@ func UploadFile(file multipart.File, fileName string) (link string){
 	return config.QiniuConfig.PubDomain + "/" + key
 }
 
-func getToken() string {
+func GetToken() string {
 	accessKey := config.QiniuConfig.AK
 	secretKey := config.QiniuConfig.SK
 	bucket := config.QiniuConfig.BUCKET

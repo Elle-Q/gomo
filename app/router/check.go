@@ -3,6 +3,7 @@ package router
 import (
 	"github.com/gin-gonic/gin"
 	"gomo/app/api"
+	"gomo/common/actions"
 	"gomo/common/middleware"
 )
 
@@ -19,10 +20,12 @@ func registerCheckRouter(g *gin.RouterGroup) {
 		user.GET("/update", _UserApi.UpdateUser)
 		user.POST("/avatar/update", _UserApi.UpdateUserAvatar)
 		user.GET("/logout", _UserApi.Logout)
-		//r.GET("/:id", api.Get)
-		//r.POST("", api.Insert)
-		//r.PUT("", api.Update)
-		//r.DELETE("", api.Delete)
+	}
+
+	_QiniuApi := api.Qiniu{}
+	qiniu := g.Group("/qiniu").Use(actions.PermissionAction())
+	{
+		qiniu.GET("/token", _QiniuApi.GetUpToken)
 	}
 
 
