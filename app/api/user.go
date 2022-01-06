@@ -114,32 +114,33 @@ func (e User) Login(ctx *gin.Context) {
 	}
 
 	//check if exist
-	var userId int
-	err = service.GetUserByPhone(&req, &userId).Error
+	var user models.User
+	err = service.FindUserByPhone(&req, &user).Error
 	if err != nil {
 		e.Error(500, err, "user is not exist!")
 		return
 	}
 
 	//create auth token
-	token, err := auth.CreateToken(userId)
+	token, err := auth.CreateToken(user.ID)
 
 	if err != nil {
 		e.Error(500, err, err.Error())
 		return
 	}
 
-	saveErr := auth.CreateAuth(uint64(userId), token)
+	saveErr := auth.CreateAuth(uint64(user.ID), token)
 	if saveErr != nil {
 		e.Error(500, saveErr, saveErr.Error())
 		return
 	}
 
-	tokens := map[string]string{
+	resp := map[string]interface{}{
+		"User": user,
 		"AccessToken":  token.AccessToken,
 		"RefreshToken": token.RefreshToken,
 	}
-	e.OK(tokens, "ok")
+	e.OK(resp, "ok")
 
 }
 

@@ -169,10 +169,21 @@ func (h *UserHandler) updateVip(vip bool, id int) *UserHandler{
 }
 
 
-func (h *UserHandler) GetUserByPhone(u *dto.UserLoginApiReq, userId *int) *UserHandler{
-	sql := "select id from public.user where phone=$1"
-	row := h.DB.QueryRow(sql, u.UserName)
-	err := row.Scan(userId)
+func (h *UserHandler) FindUserByPhone(u *dto.UserLoginApiReq, model *models.User) *UserHandler{
+
+	row := h.DB.QueryRow("select id, name, phone,avatar, qr_code,address,gender,vip,bg_imag,admin from public.user where phone=$1", u.UserName)
+
+	err := row.Scan(&model.ID,
+		&model.Name,
+		&model.Phone,
+		&model.Avatar,
+		&model.QRCode,
+		&model.Address,
+		&model.Gender,
+		&model.Vip,
+		&model.BgImag,
+		&model.Admin,
+	)
 	if err != nil {
 		_ = h.AddError(err)
 		return h

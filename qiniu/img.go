@@ -3,7 +3,6 @@ package qiniu
 import (
 	"context"
 	"fmt"
-	"github.com/google/uuid"
 	"github.com/qiniu/go-sdk/v7/auth/qbox"
 	"github.com/qiniu/go-sdk/v7/storage"
 	"gomo/config"
@@ -18,8 +17,7 @@ func UploadLocal(filePath string, fileName string) {
 	upToken := GetToken()
 
 	//make key (timestamp)
-	key := strconv.FormatInt(time.Now().UnixMilli(), 10) + "/" +
-		uuid.New().String() + "/" +fileName
+	key := strconv.FormatInt(time.Now().UnixMilli(), 10) + "/" +fileName
 
 	cfg := storage.Config{}
 	cfg.Zone = &storage.ZoneXinjiapo
@@ -40,6 +38,7 @@ func UploadLocal(filePath string, fileName string) {
 		return
 	}
 	fmt.Println(ret.Key, ret.Hash)
+	fmt.Println(config.QiniuConfig.PubDomain + "/" + key)
 }
 
 func UploadFile(file multipart.File, fileName string) (link string){
