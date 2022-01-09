@@ -12,7 +12,7 @@ import (
 	"time"
 )
 
-func UploadLocal(filePath string, fileName string) {
+func UploadLocal(filePath string, fileName string) (link string){
 	//get upToken
 	upToken := GetToken()
 
@@ -37,8 +37,8 @@ func UploadLocal(filePath string, fileName string) {
 		fmt.Println(err)
 		return
 	}
-	fmt.Println(ret.Key, ret.Hash)
-	fmt.Println(config.QiniuConfig.PubDomain + "/" + key)
+	//fmt.Println(ret.Key, ret.Hash)
+	return fmt.Sprintf("%s/%s",config.QiniuConfig.PubDomain, key)
 }
 
 func UploadFile(file multipart.File, fileName string) (link string){
@@ -85,6 +85,11 @@ func GetToken() string {
 	mac := qbox.NewMac(accessKey, secretKey)
 	upToken := putPolicy.UploadToken(mac)
 	return upToken
+}
+
+func DeleteFile(key string)  {
+
+
 }
 
 func getFileSize(file multipart.File) int64 {

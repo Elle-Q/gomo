@@ -118,7 +118,7 @@ func (h *UserHandler) Update(model *models.User) *UserHandler{
 
 //用户注册
 func (h *UserHandler) Register(model *models.User) *UserHandler{
-	sql := "insert into public.user(Phone, Name) values($1, $1)"
+	sql := "insert into public.user(Phone, Name) values($1, $2)"
 	_, err := h.DB.Exec(sql,
 		&model.Phone,
 		&model.Name)

@@ -2,10 +2,8 @@ package server
 
 import (
 	"context"
-	"database/sql"
 	"fmt"
 	"github.com/gin-gonic/gin"
-	"github.com/go-redis/redis/v7"
 	_ "github.com/lib/pq"
 	"github.com/spf13/cobra"
 	adminRouter "gomo/admin/router"
@@ -30,7 +28,7 @@ var (
 		PreRun: func(cmd *cobra.Command, args []string) {
 			setup()
 		},
-		Run: func(cmd *cobra.Command, args []string)  {
+		Run: func(cmd *cobra.Command, args []string) {
 			run()
 		},
 	}
@@ -56,7 +54,7 @@ func setup() {
 }
 
 //执行
-func run()  {
+func run() {
 	if config.ApplicationConfig.Mode == tool.ModeProd.String() {
 		gin.SetMode(gin.ReleaseMode)
 	}
@@ -64,10 +62,10 @@ func run()  {
 	runtime.App.SetEngine(gin.New())
 
 	//1. 初始化数据库
-	initDB()
+	config.InitDB()
 
 	//3. 初始化redis
-	initRedis()
+	config.InitRedis()
 
 	//3.路由, 中间件配置
 	initRouters()
@@ -113,55 +111,6 @@ func run()  {
 	log.Println("Server exiting")
 
 	//return nil
-}
-
-//初始化数据库
-func initDB() {
-	_cfg := config.DatabaseConfig
-
-	db, err := sql.Open("postgres",
-		fmt.Sprintf("host=%s port=%d user=%s password=%s dbname=%s sslmode=%v",
-			_cfg.Host,
-			_cfg.Port,
-			_cfg.User,
-			_cfg.Password,
-			_cfg.Dbname,
-			_cfg.SSLMode))
-
-	if err != nil {
-		fmt.Println(err.Error())
-	}
-	//defer db.Close()
-
-	//设置全局数据库连接
-	runtime.App.SetDb(db)
-
-	err = db.Ping()
-	if err != nil {
-		panic(err)
-	}
-}
-
-//初始化redis
-func initRedis() {
-	_cfg := config.RedisConfig
-
-	//Initializing redis
-
-	client := redis.NewClient(&redis.Options{
-		Addr: _cfg.Address,
-		Password: _cfg.Password,
-		DB: _cfg.DB,
-	})
-
-	//设置全局
-	runtime.App.SetRedis(client)
-
-
-	_, err := client.Ping().Result()
-	if err != nil {
-		panic(err)
-	}
 }
 
 //初始化路由

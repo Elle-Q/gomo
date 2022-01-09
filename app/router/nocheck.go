@@ -30,4 +30,11 @@ func registerNoCheckRouter(g *gin.RouterGroup) {
 		user.POST("/refresh", _UserApi.Refresh)
 	}
 
+
+	_ConfigApi := api.Config{}
+	config := g.Group("/config").Use(actions.PermissionAction())
+	{
+		config.GET("/:name", _ConfigApi.FindDefaultAvatarByName)
+	}
+
 }
