@@ -12,7 +12,7 @@ type UserHandler struct {
 
 func (h *UserHandler) FindById(id int, model *models.User) *UserHandler {
 
-	row := h.DB.QueryRow("select id, name, phone, qr_code,address,gender,vip,bg_imag,admin,status,update_time, create_time from public.user where id=$1", id)
+	row := h.DB.QueryRow("select id, name, phone, qr_code,address,gender,vip,bg_imag,admin,status,avatar,moto,update_time,create_time from public.user where id=$1", id)
 
 	err := row.Scan(&model.ID,
 		&model.Name,
@@ -23,6 +23,9 @@ func (h *UserHandler) FindById(id int, model *models.User) *UserHandler {
 		&model.Vip,
 		&model.BgImag,
 		&model.Admin,
+		&model.Status,
+		&model.Avatar,
+		&model.Moto,
 		&model.UpdateTime,
 		&model.CreateTime,
 	)

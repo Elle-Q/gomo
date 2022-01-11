@@ -20,7 +20,7 @@ type Tokens struct {
 
 func CreateToken(ID int) (*Tokens,error) {
 	tokens := &Tokens{}
-	tokens.AtExpires = time.Now().Add(time.Minute * 1).Unix()
+	tokens.AtExpires = time.Now().Add(time.Hour * 24).Unix()
 	tokens.AccessUuid = uuid.New().String()
 
 	tokens.RtExpires = time.Now().Add(time.Hour * 24 * 7).Unix()

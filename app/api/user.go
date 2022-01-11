@@ -12,6 +12,7 @@ import (
 	"gomo/db/handlers"
 	"gomo/db/models"
 	"gomo/qiniu"
+	"log"
 	"net/http"
 	"strconv"
 )
@@ -39,6 +40,7 @@ func (e User) GetUser(ctx *gin.Context) {
 	err = service.FindById(req.GetId(), &user).Error
 	if err != nil {
 		e.Error(500, err, "fail")
+		log.Fatal(err.Error())
 		return
 	}
 

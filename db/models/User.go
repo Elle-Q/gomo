@@ -14,6 +14,7 @@ type User struct {
 	Avatar string
 	Admin bool
 	Status string
+	Moto string
 	CreateTime time.Time
 	UpdateTime time.Time
 
