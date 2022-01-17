@@ -93,6 +93,7 @@ func run() {
 		}
 	}()
 
+	fmt.Print(tool.Yellow(string(global.XI_Banner)))
 	fmt.Println(tool.Red(string(global.Banner)))
 	fmt.Println(tool.Green("Server run at:"))
 	fmt.Printf("-  Local:   http://localhost:%d/ \r\n", config.ApplicationConfig.Port)

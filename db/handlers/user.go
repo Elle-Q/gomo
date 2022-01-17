@@ -100,15 +100,13 @@ func (h *UserHandler) List(list *[]models.User) *UserHandler {
 
 //更新用户信息
 func (h *UserHandler) Update(model *models.User) *UserHandler{
-	sql := "update public.user set Name=$1, Phone=$2, QRCode=$3, Address=$4, Gender=$5, BgImag=$6, Avatar=$7, update_time=$8 where id = $9"
+	sql := "update public.user set Name=$1, Address=$2, Gender=$3, Status=$4, Moto=$5, update_time=$6 where id = $7"
 	_, err := h.DB.Exec(sql,
 		&model.Name,
-		&model.Phone,
-		&model.QRCode,
 		&model.Address,
 		&model.Gender,
-		&model.BgImag,
-		&model.Avatar,
+		&model.Status,
+		&model.Moto,
 		&model.UpdateTime,
 		&model.ID)
 

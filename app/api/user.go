@@ -11,7 +11,6 @@ import (
 	"gomo/config"
 	"gomo/db/handlers"
 	"gomo/db/models"
-	"gomo/qiniu"
 	"log"
 	"net/http"
 	"strconv"
@@ -55,7 +54,7 @@ func (e User) UpdateUser(ctx *gin.Context) {
 	service := handlers.UserHandler{}
 	err := e.MakeContext(ctx).
 		MakeDB().
-		Bind(&req, nil).
+		Bind(&req, binding.JSON).
 		MakeService(&service.Handler).
 		Errors
 
@@ -79,7 +78,7 @@ func (e User) UpdateUserAvatar(ctx *gin.Context) {
 	service := handlers.UserHandler{}
 	err := e.MakeContext(ctx).
 		MakeDB().
-		Bind(&req, binding.Form, binding.FormMultipart).
+		Bind(&req, binding.JSON).
 		MakeService(&service.Handler).
 		Errors
 
@@ -87,17 +86,14 @@ func (e User) UpdateUserAvatar(ctx *gin.Context) {
 		e.Error(500, err, err.Error())
 		return
 	}
-	//upload avata to qiniu
-	file, err := req.Avatar.Open()
-	link := qiniu.UploadFile(file, req.Avatar.Filename)
 
-	err = service.UpdateAvatar(req.Id, link).Error
+	err = service.UpdateAvatar(req.ID, req.Avatar).Error
 	if err != nil {
 		e.Error(500, err, "fail")
 		return
 	}
 
-	e.OK(link, "ok")
+	e.OK(req.Avatar, "ok")
 }
 
 //登录

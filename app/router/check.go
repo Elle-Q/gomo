@@ -17,7 +17,7 @@ func registerCheckRouter(g *gin.RouterGroup) {
 	user := g.Group("/user").Use(middleware.AuthJWTMiddleware())
 	{
 		user.GET("/:id", _UserApi.GetUser)
-		user.GET("/update", _UserApi.UpdateUser)
+		user.POST("/update", _UserApi.UpdateUser)
 		user.POST("/avatar/update", _UserApi.UpdateUserAvatar)
 		user.GET("/logout", _UserApi.Logout)
 	}

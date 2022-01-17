@@ -2,7 +2,6 @@ package dto
 
 import (
 	"gomo/db/models"
-	"mime/multipart"
 	"time"
 )
 
@@ -15,10 +14,12 @@ func (s *UserApiReq) GetId() int {
 }
 
 type UserUpdateApiReq struct {
-	Id int `form:"id"`
-	Name string `form:"Name"`
-	Address string `form:"Address"`
-	Gender string `form:"Gender"`
+	Id int `json:"id"`
+	Name string `json:"Name"`
+	Address string `json:"Address"`
+	Gender string `json:"Gender"`
+	Moto string `json:"Moto"`
+	Status string `json:"Status"`
 	//Avatar  *multipart.FileHeader  `form:"Avatar" comment:"头像"`
 	//BgImag  *multipart.FileHeader  `form:"BgImag" comment:"背景"`
 }
@@ -29,8 +30,8 @@ func (u *UserUpdateApiReq) Generate() models.User{
 	user.Name = u.Name
 	user.Address = u.Address
 	user.Gender = u.Gender
-	//user.Avatar = u.Avatar.Filename
-	//user.BgImag = u.BgImag.Filename
+	user.Moto = u.Moto
+	user.Status = u.Status
 	user.UpdateTime=time.Now()
 	return user
 }
@@ -45,11 +46,11 @@ type UserTokenRefreshApiReq struct {
 }
 
 type UserUpdateAvatarApiReq struct {
-	Id int `form:"id"`
-	Avatar  *multipart.FileHeader  `form:"Avatar" comment:"头像"`
+	ID int `json:"UserId"`
+	Avatar  string  `json:"Avatar" comment:"头像"`
 }
 
 type UserUpdateBGApiReq struct {
-	Id int `form:"id"`
-	BgImag  *multipart.FileHeader  `form:"BgImag" comment:"背景"`
+	ID int `json:"UserId"`
+	BgImag  string  `json:"BgImag" comment:"背景"`
 }
