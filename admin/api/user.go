@@ -1,6 +1,7 @@
 package api
 
 import (
+	"encoding/json"
 	"github.com/gin-gonic/gin"
 	"gomo/app/service/dto"
 	"gomo/common/apis"
@@ -34,7 +35,8 @@ func (e User) GetUser(ctx *gin.Context) {
 		return
 	}
 
-	e.OK(user, "ok")
+	userJson,_ := json.Marshal(&user)
+	e.OK(userJson, "ok")
 
 }
 
