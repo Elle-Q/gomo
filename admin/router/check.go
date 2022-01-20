@@ -31,4 +31,10 @@ func registerCheckRouter(g *gin.RouterGroup) {
 		cat.POST("/delete", _CatApi.Delete)
 	}
 
+	_ItemApi := api.Item{}
+	item := g.Group("/item").Use(middleware.AuthJWTMiddleware())
+	{
+		item.GET("/list", _ItemApi.List)
+	}
+
 }

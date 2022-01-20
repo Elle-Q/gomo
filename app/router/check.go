@@ -19,6 +19,7 @@ func registerCheckRouter(g *gin.RouterGroup) {
 		user.GET("/:id", _UserApi.GetUser)
 		user.POST("/update", _UserApi.UpdateUser)
 		user.POST("/avatar/update", _UserApi.UpdateUserAvatar)
+		user.POST("/bg/update", _UserApi.UpdateUserBG)
 		user.GET("/logout", _UserApi.Logout)
 	}
 

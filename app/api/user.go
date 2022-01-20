@@ -93,7 +93,31 @@ func (e User) UpdateUserAvatar(ctx *gin.Context) {
 		return
 	}
 
-	e.OK(req.Avatar, "ok")
+	e.OK(nil, "ok")
+}
+
+
+func (e User) UpdateUserBG(ctx *gin.Context) {
+	req := dto.UserUpdateBGApiReq{}
+	service := handlers.UserHandler{}
+	err := e.MakeContext(ctx).
+		MakeDB().
+		Bind(&req, binding.JSON).
+		MakeService(&service.Handler).
+		Errors
+
+	if err != nil {
+		e.Error(500, err, err.Error())
+		return
+	}
+
+	err = service.UpdateBG(req.ID, req.BgImag).Error
+	if err != nil {
+		e.Error(500, err, "fail")
+		return
+	}
+
+	e.OK(nil, "ok")
 }
 
 //登录

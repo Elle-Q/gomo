@@ -203,3 +203,15 @@ func (h *UserHandler) UpdateAvatar(id int, link string) *UserHandler {
 	}
 	return h
 }
+
+//更新用户背景
+func (h *UserHandler) UpdateBG(id int, link string) *UserHandler {
+	sql := "update public.user set bg_imag= $1 where id=$2"
+	_, err := h.DB.Exec(sql,link, id)
+
+	if err != nil {
+		_ = h.AddError(err)
+		return h
+	}
+	return h
+}

@@ -9,7 +9,7 @@ func main() {
 	config.InitDB()
 
 	// 上传本地图片
-	UploadLocalFile("背景图片", "X:\\react_workspace\\gomo\\src\\assets\\bg")
+	UploadLocalFile("背景图片", "E:\\homolog资源文件\\默认背景")
 
 
 
