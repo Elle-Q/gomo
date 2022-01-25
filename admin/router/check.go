@@ -27,7 +27,8 @@ func registerCheckRouter(g *gin.RouterGroup) {
 	{
 		//cat.GET("/:id", _UserApi.GetUser)
 		cat.GET("/list", _CatApi.List)
-		cat.POST("/update", _CatApi.Save)
+		cat.GET("/list-name", _CatApi.ListName)
+		cat.POST("/update", _CatApi.Update)
 		cat.POST("/delete", _CatApi.Delete)
 	}
 

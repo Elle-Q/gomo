@@ -4,6 +4,7 @@ import (
 	"github.com/gin-gonic/gin"
 	"github.com/gin-gonic/gin/binding"
 	"gomo/admin/service/dto"
+	"gomo/admin/service/vo"
 	"gomo/common/apis"
 	"gomo/db/handlers"
 	"gomo/db/models"
@@ -37,13 +38,37 @@ func (e Category) List(ctx *gin.Context) {
 
 }
 
+func (e Category) ListName(ctx *gin.Context) {
+	service := handlers.CatHandler{}
+	err := e.MakeContext(ctx).
+		MakeDB().
+		MakeService(&service.Handler).
+		Errors
 
-func (e Category) Save(ctx *gin.Context) {
+	if err != nil {
+		e.Error(500, err, err.Error())
+		return
+	}
+
+	list := make([]vo.CatNameVO, 0)
+
+	err = service.ListName(&list).Error
+	if err != nil {
+		e.Error(500, err, "fail")
+		return
+	}
+
+	e.OK(list, "ok")
+
+}
+
+
+func (e Category) Update(ctx *gin.Context) {
 	req := dto.CatUpdateReq{}
 	service := handlers.CatHandler{}
 	err := e.MakeContext(ctx).
 		MakeDB().
-		Bind(&req, binding.Form, binding.FormMultipart).
+		Bind(&req, binding.JSON).
 		MakeService(&service.Handler).
 		Errors
 

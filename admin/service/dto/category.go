@@ -3,7 +3,6 @@ package dto
 import (
 	"errors"
 	"gomo/db/models"
-	"mime/multipart"
 	"time"
 )
 
@@ -16,12 +15,12 @@ func (s *CatApiReq) GetId() int {
 }
 
 type CatUpdateReq struct {
-	ID       int    `form:"ID" comment:"id"`        // id
-	Title    string `form:"Title" comment:"标题"`     //标题
-	SubTitle string `form:"SubTitle" comment:"副标题"` //副标题
-	Preview  *multipart.FileHeader  `form:"Preview" comment:"主图"`   //主图
-	Desc     string `form:"Desc" comment:"描述"`      //描述
-	Status   string `form:"Status" comment:"状态"`    //状态
+	ID       int    `json:"ID" comment:"id"`        // id
+	Title    string `json:"Title" comment:"标题"`     //标题
+	SubTitle string `json:"SubTitle" comment:"副标题"` //副标题
+	Preview  string `json:"Preview" comment:"主图"`   //主图
+	Desc     string `json:"Desc" comment:"描述"`      //描述
+	Status   string `json:"Status" comment:"状态"`    //状态
 }
 
 func (s *CatUpdateReq) Generate(model *models.Category) error{
@@ -36,9 +35,7 @@ func (s *CatUpdateReq) Generate(model *models.Category) error{
 	}
 	model.Title = s.Title
 	model.SubTitle = s.SubTitle
-	if s.Preview != nil {
-		model.Preview = s.Preview.Filename
-	}
+	model.Preview = s.Preview
 	model.Desc = s.Desc
 	model.Status = s.Status
 	model.UpdateTime = time.Now()

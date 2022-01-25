@@ -1,6 +1,7 @@
 package handlers
 
 import (
+	"gomo/admin/service/vo"
 	"gomo/db"
 	"gomo/db/models"
 )
@@ -90,6 +91,27 @@ func (h *CatHandler) Delete(catIds int) *CatHandler{
 	if err != nil {
 		_ = h.AddError(err)
 		return h
+	}
+	return h
+}
+
+func (h *CatHandler) ListName(list *[]vo.CatNameVO) *CatHandler{
+	rows , err := h.DB.Query("select id, title from public.category")
+
+	if err != nil {
+		_ = h.AddError(err)
+		return h
+	}
+	defer rows.Close()
+
+	for rows.Next() {
+		cat := vo.CatNameVO{}
+		err := rows.Scan(&cat.ID, &cat.Title)
+		if err != nil {
+			_ = h.AddError(err)
+			return h
+		}
+		*list = append(*list, cat)
 	}
 	return h
 }

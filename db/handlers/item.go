@@ -9,9 +9,9 @@ type ItemHandler struct {
 	db.Handler
 }
 
-func (h *ItemHandler) List(list *[]models.File) *ItemHandler {
+func (h *ItemHandler) List(list *[]models.Item) *ItemHandler {
 
-	rows , err := h.DB.Query("select id, title, sub_title, preview, desp, status, create_time ,update_time from public.category")
+	rows , err := h.DB.Query("select i.id, i.name, i.desc, i.preview, i.type,  i.b_link, i.tags, i.price, i.author, i.down_cnt ,i.scores, i.update_time,i.create_time, c.id, c.title from public.item i inner join public.category c on i.cat_id = c.id")
 
 	if err != nil {
 		_ = h.AddError(err)
@@ -20,20 +20,27 @@ func (h *ItemHandler) List(list *[]models.File) *ItemHandler {
 	defer rows.Close()
 
 	for rows.Next() {
-		cat := models.Config{}
-		err := rows.Scan(&cat.ID,
-			&cat.Title,
-			&cat.SubTitle,
-			&cat.Preview,
-			&cat.Desc,
-			&cat.Status,
-			&cat.UpdateTime,
-			&cat.CreateTime)
+		item := models.Item{}
+		err := rows.Scan(&item.ID,
+			&item.Name,
+			&item.Desc,
+			&item.Preview,
+			&item.Type,
+			&item.BLink,
+			&item.Tags,
+			&item.Price,
+			&item.Author,
+			&item.DownCnt,
+			&item.Scores,
+			&item.UpdateTime,
+			&item.CreateTime,
+			&item.Cat.ID,
+			&item.Cat.Title)
 		if err != nil {
 			_ = h.AddError(err)
 			return h
 		}
-		*list = append(*list, cat)
+		*list = append(*list, item)
 	}
 
 	return h

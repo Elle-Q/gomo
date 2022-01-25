@@ -1,14 +1,13 @@
-package models
+package vo
 
 import "time"
 
-type Item struct {
+type ItemVO struct {
 	ID int64
-	Cat *Category
+	CatName int64
 	Name string
 	Desc string
 	Preview string
-	Type string
 	BLink string
 	Tags string
 	Price int64
