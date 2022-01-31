@@ -36,6 +36,7 @@ func registerCheckRouter(g *gin.RouterGroup) {
 	item := g.Group("/item").Use(middleware.AuthJWTMiddleware())
 	{
 		item.GET("/list", _ItemApi.List)
+		item.POST("/update", _ItemApi.Update)
 	}
 
 }

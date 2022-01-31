@@ -68,7 +68,7 @@ func (h *CatHandler) Save(cat *models.Category) *CatHandler{
 		err := h.DB.QueryRow(sql, &cat.Title,&cat.SubTitle,&cat.Preview,&cat.Desc,&cat.Status,cat.UpdateTime,cat.CreateTime).
 			Scan(&returnID)
 		if err == nil {
-			cat.ID = returnID
+			cat.ID = int64(returnID)
 		}
 	} else {
 		sql = "update public.category set title=$1, sub_title=$2, preview=$3, desp=$4, status=$5, update_time=$6 where id = $7"

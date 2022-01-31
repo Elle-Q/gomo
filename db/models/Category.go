@@ -3,7 +3,7 @@ package models
 import "time"
 
 type Category struct {
-	ID int
+	ID int64
 	Title string
 	SubTitle string
 	Preview string

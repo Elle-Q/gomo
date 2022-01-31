@@ -31,7 +31,7 @@ func (s *CatUpdateReq) Generate(model *models.Category) error{
 	}
 
 	if s.ID != 0 {
-		model.ID = s.ID
+		model.ID = int64(s.ID)
 	}
 	model.Title = s.Title
 	model.SubTitle = s.SubTitle

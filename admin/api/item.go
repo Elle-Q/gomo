@@ -37,8 +37,8 @@ func (e Item) List(ctx *gin.Context) {
 }
 
 func (e Item) Update(ctx *gin.Context) {
-	req := dto.CatUpdateReq{}
-	service := handlers.CatHandler{}
+	req := dto.ItemUpdateReq{}
+	service := handlers.ItemHandler{}
 	err := e.MakeContext(ctx).
 		MakeDB().
 		Bind(&req, binding.JSON).
@@ -50,19 +50,17 @@ func (e Item) Update(ctx *gin.Context) {
 		return
 	}
 
-	Cat := models.Category{}
-	err =  req.Generate(&Cat)
 	if err != nil {
 		e.Error(500, err, "")
 		return
 	}
 
-	err = service.Save(&Cat).Error
+	err = service.Update(&req).Error
 	if err != nil {
 		e.Error(500, err, "")
 		return
 	}
 
-	e.OK(Cat.ID, "ok")
+	e.OK(req.ID, "ok")
 
 }
