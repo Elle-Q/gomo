@@ -7,6 +7,7 @@ type Category struct {
 	Title string
 	SubTitle string
 	Preview string
+	PageImg string
 	Desc string
 	Status string
 	CreateTime time.Time

@@ -10,8 +10,8 @@ type Item struct {
 	Preview string
 	Type string
 	BLink string
-	Tags string
-	Price int64
+	Tags []string
+	Price float64
 	Author string
 	DownCnt int64
 	Scores int64

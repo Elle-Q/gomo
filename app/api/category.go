@@ -41,7 +41,7 @@ func (e Category) Get(ctx *gin.Context) {
 	service :=handlers.CatHandler{}
 	err := e.MakeContext(ctx).
 		MakeDB().
-		Bind(&req).
+		Bind(&req, nil).
 		MakeService(&service.Handler).
 		Errors
 

@@ -109,11 +109,12 @@ func (e Category) Delete(ctx *gin.Context) {
 		return
 	}
 
-	err = service.Delete(req.GetId()).Error
+	err = service.Delete(req.GetDeleteId()).Error
 	if err != nil {
 		e.Error(500, err, "fail")
 		return
 	}
 
-	e.OK(req.GetId(),"ok")
+	e.OK(req.GetDeleteId(),"ok")
 }
+
