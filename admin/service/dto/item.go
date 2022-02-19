@@ -13,7 +13,7 @@ type ItemUpdateReq struct {
 	Preview string `json:"Preview" comment:"预览图"` //预览图
 	Desc    string `json:"Desc" comment:"描述"`     //描述
 	Author  string `json:"Author" comment:"作者"`   //作者
-	Price   string `json:"Price" comment:"价格"`    //价格
+	Price   float64 `json:"Price" comment:"价格"`    //价格
 	Status  string `json:"Status" comment:"状态"`   //状态
 }
 

@@ -5,7 +5,6 @@ import (
 	"gomo/admin/service/dto"
 	"gomo/db"
 	"gomo/db/models"
-	"strconv"
 	"strings"
 	"time"
 )
@@ -57,12 +56,11 @@ func (h *ItemHandler) List(list *[]models.Item) *ItemHandler {
 func (h *ItemHandler) Update(item *dto.ItemUpdateReq) *ItemHandler {
 	var sql string
 	var err error
-	price, err := strconv.Atoi(item.Price)
 	tags := strings.Split(item.Tags, ",")
 	if item.ID == 0 {
 		returnID := 0
 		sql = "insert into public.item(cat_id, name, tags, desp, preview, b_link, price, author, status, update_time, create_time) values($1,$2,$3,$4,$5,$6,$7,$8,$9,$10,$11) RETURNING id"
-		err := h.DB.QueryRow(sql, &item.CatId, &item.Name, pq.Array(tags), &item.Desc, &item.Preview, &item.BLink, &price, item.Author, item.Status, time.Now(), time.Now()).
+		err := h.DB.QueryRow(sql, &item.CatId, &item.Name, pq.Array(tags), &item.Desc, &item.Preview, &item.BLink, &item.Price, item.Author, item.Status, time.Now(), time.Now()).
 			Scan(&returnID)
 		if err == nil {
 			item.ID = returnID
@@ -83,7 +81,7 @@ func (h *ItemHandler) Update(item *dto.ItemUpdateReq) *ItemHandler {
 				status=$9,
 				update_time=$10 
 				where id = $11`
-		_, err = h.DB.Exec(sql,&item.CatId, &item.Name,pq.Array(tags), &item.Desc, &item.Preview, &item.BLink, &price, item.Author, item.Status, time.Now(), item.ID)
+		_, err = h.DB.Exec(sql,&item.CatId, &item.Name,pq.Array(tags), &item.Desc, &item.Preview, &item.BLink, &item.Price, item.Author, item.Status, time.Now(), item.ID)
 
 		if err != nil {
 			_ = h.AddError(err)
