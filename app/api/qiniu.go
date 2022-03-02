@@ -4,7 +4,7 @@ import (
 	"github.com/gin-gonic/gin"
 	"gomo/common/apis"
 	"gomo/config"
-	"gomo/qiniu"
+	"gomo/qiniu/img"
 )
 
 type Qiniu struct {
@@ -13,7 +13,7 @@ type Qiniu struct {
 
 func (q Qiniu) GetUpToken(ctx *gin.Context) {
 	q.Context = ctx
-	token := qiniu.GetToken()
+	token := img.GetPubImgToken()
 	resp := map[string]string{
 		"UpToken": token,
 		"Domain": config.QiniuConfig.PubDomain,

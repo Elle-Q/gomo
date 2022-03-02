@@ -1,6 +1,7 @@
 package api
 
 import (
+	"fmt"
 	"github.com/gin-gonic/gin"
 	"github.com/gin-gonic/gin/binding"
 	"gomo/admin/service/dto"
@@ -62,5 +63,28 @@ func (e Item) Update(ctx *gin.Context) {
 	}
 
 	e.OK(req.ID, "ok")
+
+}
+
+
+func (e Item) Upload(ctx *gin.Context) {
+	form, _ := ctx.MultipartForm()
+	files := form.File["Files[]"]
+
+	fmt.Printf("", files)
+
+	req := dto.ItemRescUploadReq{}
+	service := handlers.ItemHandler{}
+	err := e.MakeContext(ctx).
+		MakeDB().
+		Bind(&req, binding.Form, binding.FormMultipart).
+		MakeService(&service.Handler).
+		Errors
+
+
+	if err != nil {
+		e.Error(500, err, "")
+		return
+	}
 
 }

@@ -1,4 +1,4 @@
-package qiniu
+package img
 
 import (
 	"context"
@@ -14,7 +14,7 @@ import (
 
 func UploadLocal(filePath string, fileName string) (link string){
 	//get upToken
-	upToken := GetToken()
+	upToken := GetPubImgToken()
 
 	//make key (timestamp)
 	key := strconv.FormatInt(time.Now().UnixMilli(), 10) + "/" +fileName
@@ -29,7 +29,7 @@ func UploadLocal(filePath string, fileName string) (link string){
 
 	putExtra := storage.PutExtra{
 		Params: map[string]string{
-			"x:name": "avatar",
+			"x:name": "avatar", //这是测试的好玩的
 		},
 	}
 	err := formUploader.PutFile(context.Background(), &ret, upToken, key, filePath, &putExtra)
@@ -37,16 +37,18 @@ func UploadLocal(filePath string, fileName string) (link string){
 		fmt.Println(err)
 		return
 	}
-	//fmt.Println(ret.Key, ret.Hash)
-	return fmt.Sprintf("%s/%s",config.QiniuConfig.PubDomain, key)
+
+	//获取公开访问外链
+	return fmt.Sprintf(storage.MakePublicURL(config.QiniuConfig.PubDomain, key))
 }
+
 
 func UploadFile(file multipart.File, fileName string) (link string){
 	//get file size
 	fileSize := getFileSize(file)
 
 	//get upToken
-	upToken := GetToken()
+	upToken := GetPubImgToken()
 
 	//make key (timestamp)
 	key := strconv.FormatInt(time.Now().UnixMilli(), 10) + "/" + fileName
@@ -75,20 +77,7 @@ func UploadFile(file multipart.File, fileName string) (link string){
 	return config.QiniuConfig.PubDomain + "/" + key
 }
 
-func GetToken() string {
-	accessKey := config.QiniuConfig.AK
-	secretKey := config.QiniuConfig.SK
-	bucket := config.QiniuConfig.BUCKET
-	putPolicy := storage.PutPolicy{
-		Scope: bucket,
-	}
-	mac := qbox.NewMac(accessKey, secretKey)
-	upToken := putPolicy.UploadToken(mac)
-	return upToken
-}
-
 func DeleteFile(key string)  {
-
 
 }
 
@@ -103,5 +92,19 @@ func getFileSize(file multipart.File) int64 {
 	}
 	return fileSize
 }
+
+
+func GetPubImgToken() string {
+	accessKey := config.QiniuConfig.AK
+	secretKey := config.QiniuConfig.SK
+	bucket := config.QiniuConfig.PubBucket
+	putPolicy := storage.PutPolicy{
+		Scope: bucket,
+	}
+	mac := qbox.NewMac(accessKey, secretKey)
+	upToken := putPolicy.UploadToken(mac)
+	return upToken
+}
+
 
 

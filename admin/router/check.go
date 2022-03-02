@@ -37,6 +37,7 @@ func registerCheckRouter(g *gin.RouterGroup) {
 	{
 		item.GET("/list", _ItemApi.List)
 		item.POST("/update", _ItemApi.Update)
+		item.POST("/upload", _ItemApi.Upload)
 	}
 
 }

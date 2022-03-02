@@ -6,7 +6,7 @@ import (
 	"gomo/config"
 	"gomo/db/handlers"
 	"gomo/db/models"
-	"gomo/qiniu"
+	"gomo/qiniu/img"
 	"gomo/tool"
 	"io/fs"
 	"io/ioutil"
@@ -18,7 +18,7 @@ import (
 
 var wg sync.WaitGroup
 
-func UploadLocalFile(name string, dir string)  {
+func UploadLocalDir(name string, dir string)  {
 	fmt.Printf(tool.Red("==================准备上传 '%s'===================="), name)
 	tool.PrettyPrint(*config.QiniuConfig)
 
@@ -36,7 +36,7 @@ func UploadLocalFile(name string, dir string)  {
 			defer wg.Done()
 
 			filePath := filepath.Join(dir, file.Name())
-			link := qiniu.UploadLocal(filePath, file.Name())
+			link := img.UploadLocal(filePath, file.Name())
 
 			var model models.File
 			makFileModel(file, link, &model)

@@ -41,9 +41,13 @@ redis:
 
 # ----------------------七牛云----------------------
 qiniu:
-  PubDomain: http://pub.gomolog.com
   #AccessKey
   AK: WhRnhuuljtU1hBNKbBLkkX2T-ymTLTDs_pC7PSn4
   #SecretKey
   SK: KN9UTKLC7HKt2QMy4u7l8XSvEgLBJcy9CTtUfVTI
-  BUCKET: pub-img01
+  PubDomain: http://pub.gomolog.com
+  PubBucket: pub-img01
+
+  VideoDomain: http://private.video.gomolog.com
+  VideoBucket: homo-private-video
+
