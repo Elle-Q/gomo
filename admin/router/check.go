@@ -25,7 +25,7 @@ func registerCheckRouter(g *gin.RouterGroup) {
 	_CatApi := api.Category{}
 	cat := g.Group("/cat").Use(middleware.AuthJWTMiddleware())
 	{
-		//cat.GET("/:id", _UserApi.GetUser)
+		cat.GET("/:id", _UserApi.GetUser)
 		cat.GET("/list", _CatApi.List)
 		cat.GET("/list-name", _CatApi.ListName)
 		cat.POST("/update", _CatApi.Update)
@@ -38,6 +38,14 @@ func registerCheckRouter(g *gin.RouterGroup) {
 		item.GET("/list", _ItemApi.List)
 		item.POST("/update", _ItemApi.Update)
 		item.POST("/upload", _ItemApi.Upload)
+		item.POST("/delete", _ItemApi.Delete)
+		item.GET("/:ID", _ItemApi.Get)
+		item.GET("/files/:ID", _ItemApi.GetFilesById)
 	}
 
+	_FileApi := api.File{}
+	file := g.Group("/file").Use(middleware.AuthJWTMiddleware())
+	{
+		file.POST("/delete", _FileApi.DeleteQNFile)
+	}
 }

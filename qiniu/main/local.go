@@ -6,7 +6,7 @@ import (
 	"gomo/config"
 	"gomo/db/handlers"
 	"gomo/db/models"
-	"gomo/qiniu/img"
+	"gomo/qiniu/regular"
 	"gomo/tool"
 	"io/fs"
 	"io/ioutil"
@@ -36,11 +36,11 @@ func UploadLocalDir(name string, dir string)  {
 			defer wg.Done()
 
 			filePath := filepath.Join(dir, file.Name())
-			link := img.UploadLocal(filePath, file.Name())
+			link := regular.UploadLocal(filePath, file.Name())
 
 			var model models.File
 			makFileModel(file, link, &model)
-			err := service.Save(model).Error
+			err := service.Save(&model).Error
 			if err != nil {
 				log.Fatal(err)
 				return

@@ -21,7 +21,7 @@ func InitAdminRouter()  {
 	case *gin.Engine :
 		r = h.(*gin.Engine)
 	default:
-		log.Fatal("not support other engine")
+		log.Fatal("not support regular engine")
 		os.Exit(-1)
 	}
 

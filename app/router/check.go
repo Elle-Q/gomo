@@ -26,7 +26,7 @@ func registerCheckRouter(g *gin.RouterGroup) {
 	_QiniuApi := api.Qiniu{}
 	qiniu := g.Group("/qiniu").Use(actions.PermissionAction())
 	{
-		qiniu.GET("/token", _QiniuApi.GetUpToken)
+		qiniu.GET("/token", _QiniuApi.GetPubUpToken)
 	}
 
 

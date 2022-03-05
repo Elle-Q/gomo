@@ -23,4 +23,5 @@ func main() {
 
 
 	qiniu.GetPrivateUrl("test.m3u8")
+	//qiniu.GetPubUrl("item01.m3u8")
 }

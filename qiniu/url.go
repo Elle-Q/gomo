@@ -9,9 +9,10 @@ import (
 )
 
 // 公开空间访问
-func GetPubUrlkey(key string) string {
+func GetPubUrl(key string) string {
 	domain := config.QiniuConfig.PubDomain
 	publicAccessURL := storage.MakePublicURL(domain, key)
+	fmt.Println("公开空间访问链接为: ", publicAccessURL)
 	return publicAccessURL
 }
 

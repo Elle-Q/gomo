@@ -19,3 +19,14 @@ type Item struct {
 	CreateTime time.Time
 	UpdateTime time.Time
 }
+
+func (i *Item) New() *Item {
+	i.Cat = &Category{}
+	return i
+}
+
+func MakeItem()  *Item{
+	item := Item{}
+	item.Cat = &Category{}
+	return &item
+}

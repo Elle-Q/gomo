@@ -8,6 +8,8 @@ import (
 	"github.com/qiniu/go-sdk/v7/sms/bytes"
 	"github.com/qiniu/go-sdk/v7/storage"
 	"gomo/config"
+	"io"
+	"mime/multipart"
 )
 
 //文件分片上传(视频文件)
@@ -39,7 +41,7 @@ func OpsVideoHLSForExistKey(key string, m3u8Name string) (link string) {
 	}
 	fmt.Println("视频分片处理完毕>>> ", persistentId)
 	return persistentId
-	//
+
 	//deadline := time.Now().Add(time.Hour * 24).Unix() //24小时有效期
 	//url := storage.MakePrivateURL(mac, config.QiniuConfig.PubDomain, key, deadline)
 	//return fmt.Sprintf(url)
@@ -47,16 +49,25 @@ func OpsVideoHLSForExistKey(key string, m3u8Name string) (link string) {
 }
 
 //文件分片上传(视频文件)
-func UploadVideoFileForHLS(file []byte, fileName string, m3u8Name string) (link string) {
+func UploadVideoForHLSFromFile(file multipart.File, len int64, key string, m3u8Name string) (string, error) {
+	return UploadVideo(file,len,key,m3u8Name)
+}
+
+func UploadVideoForHLSFromBytes(file []byte, key string, m3u8Name string)(string, error) {
+	length := len(file)
+	return UploadVideo(bytes.NewReader(file), int64(length),key,m3u8Name)
+}
+
+//文件分片上传(视频文件)
+func UploadVideo(reader io.Reader, len int64, key string, m3u8Name string) (string, error) {
 
 	accessKey := config.QiniuConfig.AK
 	secretKey := config.QiniuConfig.SK
 	pipeline := "video-pipe" // 多媒体处理队列
 
 	mac := qbox.NewMac(accessKey, secretKey)
-	bucket := config.QiniuConfig.PubBucket
+	bucket := config.QiniuConfig.VideoBucket
 
-	key := "item/01/" + fileName
 	mp4Fop := fmt.Sprintf("avthumb/m3u8/noDomain/1/segtime/15/vb/440k|saveas/%s", storage.EncodedEntry(bucket, m3u8Name))
 
 	putPolicy := storage.PutPolicy{
@@ -77,11 +88,10 @@ func UploadVideoFileForHLS(file []byte, fileName string, m3u8Name string) (link 
 
 	putExtra := storage.PutExtra{}
 
-	dataLen := int64(len(file))
-	err := formUploader.Put(context.Background(), &ret, upToken, key, bytes.NewReader(file) , dataLen, &putExtra)
+	err := formUploader.Put(context.Background(), &ret, upToken, key, reader, len, &putExtra)
 	if err != nil {
 		fmt.Println(err)
-		return
+		return "", err
 	}
 
 	fmt.Println("视频分片任务提交完毕 >>> ", ret.PersistentID)
@@ -89,6 +99,6 @@ func UploadVideoFileForHLS(file []byte, fileName string, m3u8Name string) (link 
 
 	//deadline := time.Now().Add(time.Hour * 24).Unix() //24小时有效期
 	//url := storage.MakePrivateURL(mac,config.QiniuConfig.PubDomain, key, deadline)
-	return fmt.Sprintf(ret.PersistentID)
+	return ret.PersistentID, err
 
 }

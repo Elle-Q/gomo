@@ -20,8 +20,6 @@ type UserUpdateApiReq struct {
 	Gender string `json:"Gender"`
 	Moto string `json:"Moto"`
 	Status string `json:"Status"`
-	//Avatar  *multipart.FileHeader  `form:"Avatar" comment:"头像"`
-	//BgImag  *multipart.FileHeader  `form:"BgImag" comment:"背景"`
 }
 
 func (u *UserUpdateApiReq) Generate() models.User{

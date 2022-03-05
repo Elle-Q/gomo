@@ -15,7 +15,7 @@ type FileHandler struct {
 //根据item_id查找所有文件
 func (h *FileHandler) QueryByItemId(itemId int, list *[]models.File) *FileHandler {
 
-	rows, err := h.DB.Query("select id, type, item_id, name,qn_link,size,format,update_time, create_time from public.file where item_id=$1", itemId)
+	rows, err := h.DB.Query("select id, type, item_id, name,qn_link,size,format,bucket, key, update_time, create_time from public.file where item_id=$1", itemId)
 
 	if err != nil {
 		_ = h.AddError(err)
@@ -77,26 +77,42 @@ func (h *FileHandler) List(list *[]models.File) *FileHandler {
 }
 
 //所有文件
-func (h *FileHandler) Save(model models.File) *FileHandler {
-
-	sql := "insert into public.file(type, name, qn_link, size, format, update_time, create_time) " +
-		"values($1, $2 ,$3 ,$4 ,$5 ,$6 ,$7) "
-	_, err := h.DB.Exec(sql,
+func (h *FileHandler) Save(model *models.File) *FileHandler {
+	returnID := 0
+	sqlS := "insert into public.file(item_id, type, name, qn_link, size, format, bucket, key, update_time, create_time) " +
+		"values($1, $2 ,$3 ,$4 ,$5 ,$6 ,$7,$8,$9,$10) RETURNING id"
+	err := h.DB.QueryRow(sqlS,
+		&model.ItemId,
 		&model.Type,
 		&model.Name,
 		&model.QnLink,
 		&model.Size,
 		&model.Format,
+		&model.Bucket,
+		&model.Key,
 		time.Now(),
 		time.Now(),
-		)
+		) .Scan(&returnID)
+
+	if err != nil {
+		_ = h.AddError(err)
+		return h
+	}
+	model.ID = int64(returnID)
+	return h
+
+}
+
+func (h *FileHandler) Delete(id int) *FileHandler{
+	sql := "delete from public.file where id=$1"
+
+	_, err := h.DB.Exec(sql, id)
 
 	if err != nil {
 		_ = h.AddError(err)
 		return h
 	}
 	return h
-
 }
 
 
@@ -112,6 +128,8 @@ func parseRows(rows *sql.Rows, list *[]models.File) (err error){
 			&file.QnLink,
 			&file.Size,
 			&file.Format,
+			&file.Bucket,
+			&file.Key,
 			&file.UpdateTime,
 			&file.CreateTime,
 		)

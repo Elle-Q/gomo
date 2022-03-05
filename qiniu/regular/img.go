@@ -1,4 +1,4 @@
-package img
+package regular
 
 import (
 	"context"
@@ -14,7 +14,7 @@ import (
 
 func UploadLocal(filePath string, fileName string) (link string){
 	//get upToken
-	upToken := GetPubImgToken()
+	upToken := GetToken(config.QiniuConfig.PubBucket)
 
 	//make key (timestamp)
 	key := strconv.FormatInt(time.Now().UnixMilli(), 10) + "/" +fileName
@@ -42,16 +42,19 @@ func UploadLocal(filePath string, fileName string) (link string){
 	return fmt.Sprintf(storage.MakePublicURL(config.QiniuConfig.PubDomain, key))
 }
 
-
-func UploadFile(file multipart.File, fileName string) (link string){
-	//get file size
-	fileSize := getFileSize(file)
-
+func UploadFilePub(file multipart.File,len int64, key string) (string, error){
 	//get upToken
-	upToken := GetPubImgToken()
+	upToken := GetToken(config.QiniuConfig.PubBucket)
+	return uploadFile(file,len,key, upToken)
+}
 
-	//make key (timestamp)
-	key := strconv.FormatInt(time.Now().UnixMilli(), 10) + "/" + fileName
+func UploadFilePrivate(file multipart.File,len int64, key string) (string, error){
+	//get upToken
+	upToken := GetToken(config.QiniuConfig.VideoBucket)
+	return uploadFile(file,len,key, upToken)
+}
+
+func uploadFile(file multipart.File,len int64, key string, token string) (string, error){
 
 	//cfg
 	cfg := storage.Config{}
@@ -64,17 +67,17 @@ func UploadFile(file multipart.File, fileName string) (link string){
 
 	putExtra := storage.PutExtra{
 		Params: map[string]string{
-			"x:name": "avatar",
+			"x:name": "avatar",  //啊啊啊啊啊啊~
 		},
 	}
-	err := formUploader.Put(context.Background(), &ret, upToken, key, file, fileSize, &putExtra)
+	err := formUploader.Put(context.Background(), &ret, token, key, file, len, &putExtra)
 	if err != nil {
 		fmt.Println(err)
-		return
+		return "", err
 	}
-	fmt.Println("上传成功:", ret.Key, ret.Hash)
+	fmt.Println("上传任务提交成功:", ret.PersistentID)
 
-	return config.QiniuConfig.PubDomain + "/" + key
+	return ret.PersistentID, err
 }
 
 func DeleteFile(key string)  {
@@ -94,10 +97,9 @@ func getFileSize(file multipart.File) int64 {
 }
 
 
-func GetPubImgToken() string {
+func GetToken(bucket string) string {
 	accessKey := config.QiniuConfig.AK
 	secretKey := config.QiniuConfig.SK
-	bucket := config.QiniuConfig.PubBucket
 	putPolicy := storage.PutPolicy{
 		Scope: bucket,
 	}
@@ -105,6 +107,7 @@ func GetPubImgToken() string {
 	upToken := putPolicy.UploadToken(mac)
 	return upToken
 }
+
 
 
 
