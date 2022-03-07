@@ -25,36 +25,38 @@ func DeleteFile(bucket string, key string) error {
 
 
 //上传item资源文件
-func UploadItemResc(fileHeader *multipart.FileHeader, rescType string, itemId int) (string, error){
+func UploadItemResc(fileHeader *multipart.FileHeader, rescType string, itemId int) (string, string, error){
 
 	//文件格式
 	format := fileHeader.Header.Get("Content-Type")
 	//文件名称
 	fileName := fileHeader.Filename
+	prefix := fmt.Sprintf("item/%d/%s", itemId, rescType)
 	//七牛云存储的key('/'表示分割文件夹, eg:/item/99/preview)
-	key := fmt.Sprintf("item/%d/%s/%s", itemId, rescType, fileName)
-	//分片文件的m3u8文件名称
-	palinName := strings.Split(fileName, ".")[0]
-	m3u8Name := fmt.Sprintf("%s.m3u8", palinName)
+	key := fmt.Sprintf("%s/%s", prefix, fileName)
 
+	var m3u8Name string
 	var persistentID string
 	var err error
 	//判断是否为视频(视频需要分片处理.其他文件流程一样)
 	file, _ := fileHeader.Open()
 	if tool.IsVideo(format) {
+		//分片文件的m3u8文件名称
+		palinName := strings.Split(fileName, ".")[0]
+		m3u8Name = fmt.Sprintf("%s/%s.m3u8", prefix,palinName)
 		persistentID, err = video.UploadVideoForHLSFromFile(file, fileHeader.Size, key, m3u8Name) //上传视频
 	} else {
 		persistentID, err = regular.UploadFilePrivate(file,fileHeader.Size, key) //上传普通文件
 	}
 	if err != nil {
 		fmt.Println("上传出错: ", err)
-		return "", err
+		return "","", err
 	}
 	//保存文件上传处理单号(PersistID) => db
 	fmt.Println("提交PersistentID到数据库 >>> ", persistentID)
 
 	//返回七牛云链接 (都是私有访问链接)
-	return key, err
+	return key, m3u8Name, err
 
 }
 

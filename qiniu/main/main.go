@@ -14,7 +14,7 @@ func main() {
 	//img.UploadLocal("E:\\homolog资源文件\\默认背景\\bg6.jpg", "背景图片")
 
 	//对qiniu上已经存在的视频进行分片操作
-	//link := video.OpsVideoHLSForExistKey("1646038527976/C02L17_wrinkles.mp4", "C02L17_wrinkles.m3u8")
+	//link := video.OpsVideoHLSForExistKey("item/3/main/video2.mp4", "item/3/main/video2.m3u8")
 	//println("http://api.qiniu.com/status/get/prefop?id=",link)
 
 	//fileBytes, _ :=os.ReadFile("Q:\\3d_parttime\\C02L17_wrinkles.mp4")
@@ -22,6 +22,6 @@ func main() {
 	//println("---------------upload------------",link)
 
 
-	qiniu.GetPrivateUrl("test.m3u8")
+	qiniu.GetPrivateUrl("item/5/main/video3.m3u8")
 	//qiniu.GetPubUrl("item01.m3u8")
 }

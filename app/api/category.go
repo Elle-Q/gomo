@@ -2,7 +2,9 @@ package api
 
 import (
 	"github.com/gin-gonic/gin"
+	"gomo/app/service"
 	"gomo/app/service/dto"
+	"gomo/app/service/vo"
 	"gomo/common/apis"
 	"gomo/db/handlers"
 	"gomo/db/models"
@@ -13,10 +15,10 @@ type Category struct {
 }
 
 func (e Category) List(ctx *gin.Context) {
-	service :=handlers.CatHandler{}
+	catHandler :=handlers.CatHandler{}
 	err := e.MakeContext(ctx).
 		MakeDB().
-		MakeService(&service.Handler).
+		MakeService(&catHandler.Handler).
 		Errors
 
 	if err != nil {
@@ -26,7 +28,7 @@ func (e Category) List(ctx *gin.Context) {
 
 	list := make([]models.Category, 0)
 
-	err = service.List(&list).Error
+	err = catHandler.List(&list).Error
 	if err != nil {
 		e.Error(500, err, "fail")
 		return
@@ -38,11 +40,11 @@ func (e Category) List(ctx *gin.Context) {
 
 func (e Category) Get(ctx *gin.Context) {
 	req := dto.CatApiReq{}
-	service :=handlers.CatHandler{}
+	catHandler :=handlers.CatHandler{}
 	err := e.MakeContext(ctx).
 		MakeDB().
 		Bind(&req, nil).
-		MakeService(&service.Handler).
+		MakeService(&catHandler.Handler).
 		Errors
 
 	if err != nil {
@@ -52,7 +54,7 @@ func (e Category) Get(ctx *gin.Context) {
 
 	category := models.Category{}
 
-	err = service.Get(req.GetId(), &category).Error
+	err = catHandler.Get(req.GetId(), &category).Error
 	if err != nil {
 		e.Error(500, err, "fail")
 		return
@@ -60,3 +62,28 @@ func (e Category) Get(ctx *gin.Context) {
 
 	e.OK(category, "ok")
 }
+
+func (e Category) ListCatsWithItems(ctx *gin.Context) {
+	catItemService :=service.NewCatItemService()
+	err := e.MakeContext(ctx).
+		MakeDB().
+		MakeService(&catItemService.ItemHandler.Handler).
+		MakeService(&catItemService.CatHandler.Handler).
+		Errors
+
+	if err != nil {
+		e.Error(500, err, err.Error())
+		return
+	}
+
+	vos := make([]vo.SubjectVO, 0)
+
+	err = catItemService.ListCatsWithItems(&vos).Error
+	if err != nil {
+		e.Error(500, err, "fail")
+		return
+	}
+
+	e.OK(vos, "ok")
+}
+

@@ -43,10 +43,7 @@ func (e Item) Get(ctx *gin.Context) {
 //根据itemId查询文件明细
 func (e Item) GetFilesById(ctx *gin.Context) {
 	req := dto.ItemIDReq{}
-	itemService := service.ItemService{
-		ItemHandler: &handlers.ItemHandler{},
-		FileHandler: &handlers.FileHandler{},
-	}
+	itemService := service.NewItemService()
 	err := e.MakeContext(ctx).
 		MakeDB().
 		Bind(&req, nil).
@@ -157,13 +154,17 @@ func (e Item) Upload(ctx *gin.Context) {
 	//保存所有信息到db
 	for _,fileHeader := range files {
 
-		key, e:= qiniu.UploadItemResc(fileHeader, req.Type, req.ItemID)
+		key, m3u8, e:= qiniu.UploadItemResc(fileHeader, req.Type, req.ItemID)
 		if e != nil {
 			continue
 		}
 
 		file := models.File{}
-		file.QnLink = qiniu.GetPrivateUrl(key)
+		if len(m3u8) > 0 {
+			file.QnLink = qiniu.GetPrivateUrl(m3u8)
+		} else {
+			file.QnLink = qiniu.GetPrivateUrl(key)
+		}
 		file.Size = float32(fileHeader.Size)
 		file.Format = fileHeader.Header.Get("Content-Type")
 		file.Type = req.Type

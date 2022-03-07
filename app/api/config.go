@@ -48,13 +48,17 @@ func (e Config) FindDefaultAvatarByName(ctx *gin.Context) {
 
 	//读取配置项值, 查找file表
 	var files []models.File
-	fileService.QueryByIds(config.Val, &files)
+	err2 := fileService.QueryByIds(config.Val, &files).Error
+
+	if err2 != nil {
+		e.Error(500, err2, err2.Error())
+		return
+	}
 
 	var avatars []string
 	for _, f := range files {
 		avatars = append(avatars, f.QnLink)
 	}
 	e.OK(avatars, "ok")
-
 
 }

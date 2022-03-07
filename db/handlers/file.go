@@ -15,7 +15,7 @@ type FileHandler struct {
 //根据item_id查找所有文件
 func (h *FileHandler) QueryByItemId(itemId int, list *[]models.File) *FileHandler {
 
-	rows, err := h.DB.Query("select id, type, item_id, name,qn_link,size,format,bucket, key, update_time, create_time from public.file where item_id=$1", itemId)
+	rows, err := h.DB.Query("select id, type, item_id, name,qn_link,size,format, bucket, key, update_time, create_time from public.file where item_id=$1", itemId)
 
 	if err != nil {
 		_ = h.AddError(err)
@@ -36,7 +36,7 @@ func (h *FileHandler) QueryByItemId(itemId int, list *[]models.File) *FileHandle
 //根据ids查找所有文件
 func (h *FileHandler) QueryByIds(ids string, list *[]models.File) *FileHandler {
 
-	sql := fmt.Sprintf("select id, type, item_id, name,qn_link,size,format,update_time, create_time from public.file where id IN(%s)", ids)
+	sql := fmt.Sprintf("select id, type, item_id, name,qn_link,size,format,bucket,key,update_time, create_time from public.file where id IN(%s)", ids)
 	rows, err := h.DB.Query(sql)
 
 	if err != nil {
@@ -58,7 +58,7 @@ func (h *FileHandler) QueryByIds(ids string, list *[]models.File) *FileHandler {
 //所有文件
 func (h *FileHandler) List(list *[]models.File) *FileHandler {
 
-	rows, err := h.DB.Query("select id, type, item_id, name,qn_link,size,format,update_time, create_time from public.file")
+	rows, err := h.DB.Query("select id, type, item_id, name,qn_link,size,format,bucket,key,update_time, create_time from public.file")
 
 	if err != nil {
 		_ = h.AddError(err)

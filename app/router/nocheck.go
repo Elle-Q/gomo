@@ -18,6 +18,7 @@ func registerNoCheckRouter(g *gin.RouterGroup) {
 	{
 		category.GET("/list", _CatApi.List)
 		category.GET("/:id", _CatApi.Get)
+		category.GET("/list/items", _CatApi.ListCatsWithItems)
 		//r.POST("", api.Insert)
 		//r.PUT("", api.Update)
 		//r.DELETE("", api.Delete)

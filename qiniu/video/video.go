@@ -39,12 +39,11 @@ func OpsVideoHLSForExistKey(key string, m3u8Name string) (link string) {
 		fmt.Println(err)
 		return
 	}
+
+	//fmt.Println("24小时有效播放链接>> ", GetPrivateUrl(key))
+
 	fmt.Println("视频分片处理完毕>>> ", persistentId)
 	return persistentId
-
-	//deadline := time.Now().Add(time.Hour * 24).Unix() //24小时有效期
-	//url := storage.MakePrivateURL(mac, config.QiniuConfig.PubDomain, key, deadline)
-	//return fmt.Sprintf(url)
 
 }
 
