@@ -1,6 +1,7 @@
 package api
 
 import (
+	"fmt"
 	"github.com/gin-gonic/gin"
 	"github.com/gin-gonic/gin/binding"
 	service "gomo/admin/service"
@@ -41,7 +42,7 @@ func (e Item) Get(ctx *gin.Context) {
 }
 
 //根据itemId查询文件明细
-func (e Item) GetFilesById(ctx *gin.Context) {
+func (e Item) GetFilesByItemId(ctx *gin.Context) {
 	req := dto.ItemIDReq{}
 	itemService := service.NewItemService()
 	err := e.MakeContext(ctx).
@@ -56,7 +57,7 @@ func (e Item) GetFilesById(ctx *gin.Context) {
 	}
 
 	itemVO := vo.ItemFilesVO{}
-	err = itemService.GetFilesById(req.ID, &itemVO).Error
+	err = itemService.GetFilesByItemId(req.ID, &itemVO).Error
 	if err != nil {
 		e.Error(500, err, "")
 		return
@@ -153,28 +154,32 @@ func (e Item) Upload(ctx *gin.Context) {
 	//保存上传进度persistId
 	//保存所有信息到db
 	for _,fileHeader := range files {
+		fileHeader := fileHeader
+		go func() {
+			key, m3u8, e:= qiniu.UploadItemResc(fileHeader, req.Type, req.ItemID)
+			if e != nil {
+				return
+			}
+			file := models.File{}
+			if len(m3u8) > 0 {
+				file.QnLink = qiniu.GetPrivateUrl(m3u8)
+				file.Key = m3u8
+			} else {
+				file.QnLink = qiniu.GetPrivateUrl(key)
+				file.Key = key
+			}
+			file.Size = float32(fileHeader.Size)
+			file.Format = fileHeader.Header.Get("Content-Type")
+			file.Type = req.Type
+			file.Name = fileHeader.Filename
+			file.Bucket = config.QiniuConfig.VideoBucket
+			file.ItemId = int64(req.ItemID)
+			//保存文件
+			fileHandler.Save(&file)
 
-		key, m3u8, e:= qiniu.UploadItemResc(fileHeader, req.Type, req.ItemID)
-		if e != nil {
-			continue
-		}
+			fmt.Println("保存文件信息到数据库")
+		}()
 
-		file := models.File{}
-		if len(m3u8) > 0 {
-			file.QnLink = qiniu.GetPrivateUrl(m3u8)
-		} else {
-			file.QnLink = qiniu.GetPrivateUrl(key)
-		}
-		file.Size = float32(fileHeader.Size)
-		file.Format = fileHeader.Header.Get("Content-Type")
-		file.Type = req.Type
-		file.Name = fileHeader.Filename
-		file.Bucket = config.QiniuConfig.VideoBucket
-		file.Key = key
-		file.ItemId = int64(req.ItemID)
-
-		//保存文件
-		fileHandler.Save(&file)
 	}
 
 	e.OK("", "ok")

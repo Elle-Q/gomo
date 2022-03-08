@@ -26,6 +26,6 @@ func GetPrivateUrl(key string) string{
 	deadline := time.Now().Add(time.Hour * 7).Unix() //1小时有效期
 	privateAccessURL := storage.MakePrivateURLv2WithQueryString(mac, domain, key, "pm3u8/0", deadline)
 
-	fmt.Println("私有空间访问链接为: ", privateAccessURL)
+	//fmt.Println("私有空间访问链接为: ", privateAccessURL)
 	return privateAccessURL
 }

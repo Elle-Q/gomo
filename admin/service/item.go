@@ -4,6 +4,7 @@ import (
 	"gomo/admin/service/vo"
 	"gomo/db/handlers"
 	"gomo/db/models"
+	"gomo/qiniu"
 )
 
 type ItemService struct {
@@ -13,7 +14,7 @@ type ItemService struct {
 }
 
 
-func (e *ItemService) GetFilesById(ID int, vo *vo.ItemFilesVO) *ItemService{
+func (e *ItemService) GetFilesByItemId(ID int, vo *vo.ItemFilesVO) *ItemService{
 	itemHandler := e.ItemHandler
 	fileHandler := e.FileHandler
 
@@ -34,6 +35,8 @@ func (e *ItemService) GetFilesById(ID int, vo *vo.ItemFilesVO) *ItemService{
 	refs := make([]models.File, 0)
 
 	for _, f := range files{
+		p := &f
+		p.QnLink = qiniu.GetPrivateUrl(f.Key)
 		switch f.Type {
 		case "main":
 			main = append(main, f)
