@@ -4,16 +4,16 @@ import (
 	"github.com/gin-gonic/gin"
 	"gomo/common/apis"
 	"gomo/config"
-	"gomo/qiniu"
+	"gomo/qiniu/regular"
 )
 
 type Qiniu struct {
 	apis.Api
 }
 
-func (q Qiniu) GetUpToken(ctx *gin.Context) {
+func (q Qiniu) GetPubUpToken(ctx *gin.Context) {
 	q.Context = ctx
-	token := qiniu.GetToken()
+	token := regular.GetToken(config.QiniuConfig.PubBucket)
 	resp := map[string]string{
 		"UpToken": token,
 		"Domain": config.QiniuConfig.PubDomain,

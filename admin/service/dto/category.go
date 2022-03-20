@@ -16,9 +16,9 @@ func (s *CatApiReq) GetId() int {
 
 type CatUpdateReq struct {
 	ID       int    `json:"ID" comment:"id"`        // id
-	Title    string `json:"Title" comment:"标题"`     //标题
+	Title    string `json:"CatTitle" comment:"标题"`     //标题
 	SubTitle string `json:"SubTitle" comment:"副标题"` //副标题
-	Preview  string `json:"Preview" comment:"预览图"`   //主图
+	Preview  string `json:"Preview" comment:"预览图"`   //预览图
 	PageImg  string `json:"PageImg" comment:"主图"`   //主图
 	Desc     string `json:"Desc" comment:"描述"`      //描述
 	Status   string `json:"Status" comment:"状态"`    //状态

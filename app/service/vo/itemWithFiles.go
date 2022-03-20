@@ -21,23 +21,18 @@ type ItemVO struct {
 	UpdateTime time.Time
 }
 
-type ItemFilesVO struct {
+type ItemWithFilesVO struct {
 	ID       int64
-	ItemName string
+	Name     string
 	RescType string
+	Desc     string
+	Tags     []string
+	Author   string
+	Scores   int64
+	CatID    int64
+	CatTitle string
+	DownCnt  int64
 	Main     []models.File
 	Refs     []models.File
 	Preview  []models.File
 }
-
-//
-//type ItemFile struct {
-//	ID     int64
-//	Name   string
-//	Type   string
-//	QnLink string
-//	Size   string
-//	Format string
-//	Bucket string
-//	Key    string
-//}
