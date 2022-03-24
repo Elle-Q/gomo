@@ -35,7 +35,7 @@ func UploadItemResc(fileHeader *multipart.FileHeader, rescType string, itemId in
 	//七牛云存储的key('/'表示分割文件夹, eg:/item/99/preview)
 	key := fmt.Sprintf("%s/%s", prefix, fileName)
 
-	var m3u8Name string
+	var m3u8Key string
 	var persistentID string
 	var err error
 	//判断是否为视频(视频需要分片处理.其他文件流程一样)
@@ -43,8 +43,8 @@ func UploadItemResc(fileHeader *multipart.FileHeader, rescType string, itemId in
 	if tool.IsVideo(format) {
 		//分片文件的m3u8文件名称
 		palinName := strings.Split(fileName, ".")[0]
-		m3u8Name = fmt.Sprintf("%s/%s.m3u8", prefix,palinName)
-		persistentID, err = video.UploadVideoForHLSFromFile(file, fileHeader.Size, key, m3u8Name) //上传视频
+		m3u8Key = fmt.Sprintf("%s/%s.m3u8", prefix,palinName)
+		persistentID, err = video.UploadVideoForHLSFromFile(file, fileHeader.Size, key, m3u8Key) //上传视频
 	} else {
 		persistentID, err = regular.UploadFilePrivate(file,fileHeader.Size, key) //上传普通文件
 	}
@@ -56,7 +56,7 @@ func UploadItemResc(fileHeader *multipart.FileHeader, rescType string, itemId in
 	fmt.Println("提交PersistentID到数据库 >>> ", persistentID)
 
 	//返回七牛云链接 (都是私有访问链接)
-	return key, m3u8Name, err
+	return key, m3u8Key, err
 
 }
 

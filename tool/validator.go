@@ -1,7 +1,7 @@
 package tool
 
 var VideoFormats = map[string]int{
-	"video/mp4":0,
+	"mp4":0,
 	"MOV":1,
 	"WMV":2,
 	"AVI":3,

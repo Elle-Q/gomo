@@ -37,6 +37,7 @@ func (h *FileHandler) QueryByItemId(itemId int, list *[]models.File) *FileHandle
 func (h *FileHandler) QueryByIds(ids string, list *[]models.File) *FileHandler {
 
 	sql := fmt.Sprintf("select id, type, item_id, name,size,format,bucket,key,mark1, update_time,create_time from public.file where id IN(%s)", ids)
+
 	rows, err := h.DB.Query(sql)
 
 	if err != nil {
@@ -80,7 +81,7 @@ func (h *FileHandler) List(list *[]models.File) *FileHandler {
 func (h *FileHandler) Save(model *models.File) *FileHandler {
 	returnID := 0
 	sqlS := "insert into public.file(item_id, type, name, size, format, bucket, key, mark1, update_time, create_time) " +
-		"values($1, $2 ,$3 ,$4 ,$5 ,$6 ,$7,$8,$9) RETURNING id"
+		"values($1, $2 ,$3 ,$4 ,$5 ,$6 ,$7,$8,$9,$10) RETURNING id"
 	err := h.DB.QueryRow(sqlS,
 		&model.ItemId,
 		&model.Type,
@@ -89,6 +90,7 @@ func (h *FileHandler) Save(model *models.File) *FileHandler {
 		&model.Format,
 		&model.Bucket,
 		&model.Key,
+		"",
 		time.Now(),
 		time.Now(),
 		) .Scan(&returnID)

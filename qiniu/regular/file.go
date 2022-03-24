@@ -73,7 +73,7 @@ func uploadFile(file multipart.File,len int64, key string, token string) (string
 		fmt.Println(err)
 		return "", err
 	}
-	fmt.Println("上传任务提交成功:", ret.PersistentID)
+	fmt.Println("** 普通文件 ** 上传任务提交成功:", ret.PersistentID)
 
 	return ret.PersistentID, err
 }

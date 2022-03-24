@@ -5,6 +5,7 @@ import (
 	"gomo/db/handlers"
 	"gomo/db/models"
 	"gomo/qiniu"
+	"strings"
 )
 
 type ItemService struct {
@@ -36,7 +37,11 @@ func (e *ItemService) GetFilesByItemId(ID int, vo *vo.ItemFilesVO) *ItemService{
 
 	for _, f := range files{
 		p := &f
-		p.QnLink = qiniu.GetPrivateUrl(f.Key)
+		if strings.Compare(f.Type,"video") == 0{
+			p.QnLink = qiniu.GetPrivateUrlForM3U8(f.Key)
+		} else {
+			p.QnLink = qiniu.GetPrivateUrl(f.Key)
+		}
 		switch f.Type {
 		case "main":
 			main = append(main, f)

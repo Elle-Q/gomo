@@ -12,6 +12,7 @@ import (
 	"gomo/db/handlers"
 	"gomo/db/models"
 	"gomo/qiniu"
+	"gomo/tool"
 )
 
 type Item struct {
@@ -156,26 +157,31 @@ func (e Item) Upload(ctx *gin.Context) {
 	for _,fileHeader := range files {
 		fileHeader := fileHeader
 		go func() {
-			key, m3u8, e:= qiniu.UploadItemResc(fileHeader, req.Type, req.ItemID)
+			key, m3u8Key, e:= qiniu.UploadItemResc(fileHeader, req.Type, req.ItemID)
 			if e != nil {
 				return
 			}
 			file := models.File{}
-			if len(m3u8) > 0 {
-				file.QnLink = qiniu.GetPrivateUrl(m3u8)
-				file.Key = m3u8
+			if len(m3u8Key) > 0 {
+				file.QnLink = qiniu.GetPrivateUrlForM3U8(m3u8Key)
+				file.Key = m3u8Key
 			} else {
 				file.QnLink = qiniu.GetPrivateUrl(key)
 				file.Key = key
 			}
+			name,format :=tool.ParseFileName(fileHeader.Filename)
 			file.Size = float32(fileHeader.Size)
-			file.Format = fileHeader.Header.Get("Content-Type")
+			file.Format = format
 			file.Type = req.Type
-			file.Name = fileHeader.Filename
+			file.Name = name
 			file.Bucket = config.QiniuConfig.VideoBucket
 			file.ItemId = int64(req.ItemID)
 			//保存文件
-			fileHandler.Save(&file)
+			errDb := fileHandler.Save(&file).Error
+
+			if errDb != nil {
+				return
+			}
 
 			fmt.Println("保存文件信息到数据库")
 		}()
