@@ -28,7 +28,7 @@ type ItemWithFilesVO struct {
 	Desc     string
 	Tags     []string
 	Author   string
-	Scores   int64
+	Scores   float64
 	CatID    int64
 	CatTitle string
 	DownCnt  int64

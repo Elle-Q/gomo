@@ -43,9 +43,10 @@ func init() {
 	AppRouters = append(AppRouters, appRouter.InitAppRouter)
 
 	AdminRouters = append(AdminRouters, adminRouter.InitAdminRouter)
+
 }
 
-//初始化操作
+// 初始化操作
 func setup() {
 
 	//1. 读取配置, 初始化数据库
@@ -53,7 +54,7 @@ func setup() {
 
 }
 
-//执行
+// 执行
 func run() {
 	if config.ApplicationConfig.Mode == tool.ModeProd.String() {
 		gin.SetMode(gin.ReleaseMode)
@@ -114,7 +115,7 @@ func run() {
 	//return nil
 }
 
-//初始化路由
+// 初始化路由
 func initRouters() {
 	var r *gin.Engine
 	h := runtime.App.GetEngine()

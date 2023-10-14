@@ -2,22 +2,20 @@ package config
 
 import (
 	"gopkg.in/yaml.v3"
-	"io/ioutil"
 	"log"
+	"os"
 )
 
-
-//全部配置项
+// 全部配置项
 type Config struct {
 	Application *Application
 	Database    *Database
-	JWT  *JWT
-	Redis *Redis
-	Qiniu *Qiniu
+	JWT         *JWT
+	Redis       *Redis
+	Qiniu       *Qiniu
 	//Logger      *Logger
 	//Queue       *Queue
 }
-
 
 func Setup(filePath string) {
 	_cfg := Config{
@@ -28,7 +26,7 @@ func Setup(filePath string) {
 		QiniuConfig,
 	}
 
-	ymlData, err := ioutil.ReadFile(filePath)
+	ymlData, err := os.ReadFile(filePath)
 	if err != nil {
 		log.Fatal(err)
 	}

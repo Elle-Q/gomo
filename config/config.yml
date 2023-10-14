@@ -1,8 +1,8 @@
 # -------------------应用----------------------
 application:
   mode: dev       #开发环境 dev  test  prod
-  host: 127.0.0.1
-  name: gomo-App
+  host: localhost
+  name: leetroll-App
   port: 8089
   readtimeout: 1
   writertimeout: 1
@@ -18,25 +18,25 @@ application:
 # -------------------数据库----------------------
 database:
   driver: postgres
-  username: elle
-  password: Ggg123654.
-  host: localhost
+  username: leetroll
+  password: 123654
+  host: 172.16.1.147
   port: 5432
   sslMode: disable
-  dbname: homo
+  dbname: leetroll
 
 # -------------------jwt-------------------------
 jwt:
   # token 密钥
-  accessSecret: elle-qu
-  refreshSecret: loveyou
+  accessSecret: leetroll
+  refreshSecret: numberone
   # token 过期时间 单位：秒
   timeout: 3600
 
 # -------------------redis缓存-------------------------
 redis:
-  address: 192.168.230.101:6379
-  password: quxiaoyu
+  address: 172.16.1.147:6379
+  password: leetroll
   db: 2
 
 # ----------------------七牛云----------------------
@@ -45,7 +45,7 @@ qiniu:
   AK: WhRnhuuljtU1hBNKbBLkkX2T-ymTLTDs_pC7PSn4
   #SecretKey
   SK: KN9UTKLC7HKt2QMy4u7l8XSvEgLBJcy9CTtUfVTI
-  PubDomain: http://pub.gomolog.com
+  PubDomain: http://www.leetroll.com
   PubBucket: pub-img01
 
   VideoDomain: http://private.video.gomolog.com

@@ -15,7 +15,7 @@ type Config struct {
 	apis.Api
 }
 
-//查询系统默认头像配置
+// 查询系统默认头像配置
 func (e Config) FindDefaultAvatarByName(ctx *gin.Context) {
 	req := dto.ConfigAvatarApiReq{}
 	configService := handlers.ConfigHandler{}
