@@ -48,6 +48,6 @@ qiniu:
   PubDomain: http://www.leetroll.com
   PubBucket: pub-img01
 
-  VideoDomain: http://private.video.gomolog.com
-  VideoBucket: homo-private-video
+  VideoDomain: http://private.video.leetroll.com
+  VideoBucket: leetroll-private-video
 

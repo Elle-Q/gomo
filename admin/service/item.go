@@ -5,7 +5,7 @@ import (
 	"leetroll/db/handlers"
 	"leetroll/db/models"
 	"leetroll/qiniu"
-	"strings"
+	"leetroll/tool"
 )
 
 type ItemService struct {
@@ -36,7 +36,7 @@ func (e *ItemService) GetFilesByItemId(ID int, vo *vo.ItemFilesVO) *ItemService 
 
 	for _, f := range files {
 		p := &f
-		if strings.Compare(f.Type, "video") == 0 {
+		if tool.IsVideo(f.Format) {
 			p.QnLink = qiniu.GetPrivateUrlForM3U8(f.Key)
 		} else {
 			p.QnLink = qiniu.GetPrivateUrl(f.Key)

@@ -5,6 +5,7 @@ import (
 	"leetroll/db/handlers"
 	"leetroll/db/models"
 	"leetroll/qiniu"
+	"leetroll/tool"
 )
 
 type ItemService struct {
@@ -35,7 +36,11 @@ func (e *ItemService) GetItemAndFilesByItemId(ID int, vo *vo.ItemWithFilesVO) *I
 
 	for _, f := range files {
 		p := &f
-		p.QnLink = qiniu.GetPrivateUrl(f.Key)
+		if tool.IsVideo(f.Format) {
+			p.QnLink = qiniu.GetPrivateUrlForM3U8(f.Key)
+		} else {
+			p.QnLink = qiniu.GetPrivateUrl(f.Key)
+		}
 		switch f.Type {
 		case "main":
 			main = append(main, f)
