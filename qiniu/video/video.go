@@ -7,12 +7,12 @@ import (
 	"github.com/qiniu/go-sdk/v7/auth/qbox"
 	"github.com/qiniu/go-sdk/v7/sms/bytes"
 	"github.com/qiniu/go-sdk/v7/storage"
-	"gomo/config"
 	"io"
+	"leetroll/config"
 	"mime/multipart"
 )
 
-//文件分片上传(视频文件)
+// 文件分片上传(视频文件)
 func OpsVideoHLSForExistKey(key string, m3u8Name string) (link string) {
 
 	accessKey := config.QiniuConfig.AK
@@ -33,7 +33,6 @@ func OpsVideoHLSForExistKey(key string, m3u8Name string) (link string) {
 	//处理指令
 	mp4Fop := fmt.Sprintf("avthumb/m3u8/noDomain/1/segtime/15/vb/440k|saveas/%s", storage.EncodedEntry(bucket, m3u8Name))
 
-
 	persistentId, err := operationManager.Pfop(bucket, key, mp4Fop, pipeline, "", true)
 	if err != nil {
 		fmt.Println(err)
@@ -47,17 +46,17 @@ func OpsVideoHLSForExistKey(key string, m3u8Name string) (link string) {
 
 }
 
-//文件分片上传(视频文件)
+// 文件分片上传(视频文件)
 func UploadVideoForHLSFromFile(file multipart.File, len int64, key string, m3u8Name string) (string, error) {
-	return UploadVideo(file,len,key,m3u8Name)
+	return UploadVideo(file, len, key, m3u8Name)
 }
 
-func UploadVideoForHLSFromBytes(file []byte, key string, m3u8Name string)(string, error) {
+func UploadVideoForHLSFromBytes(file []byte, key string, m3u8Name string) (string, error) {
 	length := len(file)
-	return UploadVideo(bytes.NewReader(file), int64(length),key,m3u8Name)
+	return UploadVideo(bytes.NewReader(file), int64(length), key, m3u8Name)
 }
 
-//文件分片上传(视频文件)
+// 文件分片上传(视频文件)
 func UploadVideo(reader io.Reader, len int64, key string, m3u8Name string) (string, error) {
 
 	accessKey := config.QiniuConfig.AK
@@ -70,12 +69,11 @@ func UploadVideo(reader io.Reader, len int64, key string, m3u8Name string) (stri
 	mp4Fop := fmt.Sprintf("avthumb/m3u8/noDomain/1/segtime/15/vb/440k|saveas/%s", storage.EncodedEntry(bucket, m3u8Name))
 
 	putPolicy := storage.PutPolicy{
-		Scope: bucket,
-		PersistentOps: mp4Fop,
-		PersistentPipeline: pipeline,  // 多媒体处理队列
+		Scope:              bucket,
+		PersistentOps:      mp4Fop,
+		PersistentPipeline: pipeline, // 多媒体处理队列
 	}
 	upToken := putPolicy.UploadToken(mac)
-
 
 	cfg := storage.Config{}
 	cfg.Zone = &storage.ZoneXinjiapo //对应机房
@@ -94,7 +92,6 @@ func UploadVideo(reader io.Reader, len int64, key string, m3u8Name string) (stri
 	}
 
 	fmt.Println("视频分片任务提交完毕 >>> ", ret.PersistentID)
-
 
 	//deadline := time.Now().Add(time.Hour * 24).Unix() //24小时有效期
 	//url := storage.MakePrivateURL(mac,config.QiniuConfig.PubDomain, key, deadline)

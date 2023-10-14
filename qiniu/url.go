@@ -4,7 +4,7 @@ import (
 	"fmt"
 	"github.com/qiniu/go-sdk/v7/auth"
 	"github.com/qiniu/go-sdk/v7/storage"
-	"gomo/config"
+	"leetroll/config"
 	"time"
 )
 
@@ -17,21 +17,21 @@ func GetPubUrl(key string) string {
 }
 
 // 私有空间访问
-func GetPrivateUrl(key string) string{
+func GetPrivateUrl(key string) string {
 	accessKey := config.QiniuConfig.AK
 	secretKey := config.QiniuConfig.SK
 	mac := auth.New(accessKey, secretKey)
 
 	domain := config.QiniuConfig.VideoDomain
 	deadline := time.Now().Add(time.Hour * 360).Unix() //1小时有效期
-	privateAccessURL := storage.MakePrivateURLv2(mac, domain, key,  deadline)
+	privateAccessURL := storage.MakePrivateURLv2(mac, domain, key, deadline)
 
 	//fmt.Println("私有空间访问链接为: ", privateAccessURL)
 	return privateAccessURL
 }
 
 // 私有空间访问 (video)
-func GetPrivateUrlForM3U8(key string) string{
+func GetPrivateUrlForM3U8(key string) string {
 	accessKey := config.QiniuConfig.AK
 	secretKey := config.QiniuConfig.SK
 	mac := auth.New(accessKey, secretKey)

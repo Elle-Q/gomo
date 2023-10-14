@@ -4,22 +4,22 @@ import (
 	"fmt"
 	"github.com/gin-gonic/gin"
 	"github.com/gin-gonic/gin/binding"
-	service "gomo/admin/service"
-	"gomo/admin/service/dto"
-	"gomo/admin/service/vo"
-	"gomo/common/apis"
-	"gomo/config"
-	"gomo/db/handlers"
-	"gomo/db/models"
-	"gomo/qiniu"
-	"gomo/tool"
+	service "leetroll/admin/service"
+	"leetroll/admin/service/dto"
+	"leetroll/admin/service/vo"
+	"leetroll/common/apis"
+	"leetroll/config"
+	"leetroll/db/handlers"
+	"leetroll/db/models"
+	"leetroll/qiniu"
+	"leetroll/tool"
 )
 
 type Item struct {
 	apis.Api
 }
 
-//根据itemId查询iten明细
+// 根据itemId查询iten明细
 func (e Item) Get(ctx *gin.Context) {
 	req := dto.ItemIDReq{}
 	handler := handlers.ItemHandler{}
@@ -42,7 +42,7 @@ func (e Item) Get(ctx *gin.Context) {
 	e.OK(item, "ok")
 }
 
-//根据itemId查询文件明细
+// 根据itemId查询文件明细
 func (e Item) GetFilesByItemId(ctx *gin.Context) {
 	req := dto.ItemIDReq{}
 	itemService := service.NewItemService()
@@ -131,8 +131,7 @@ func (e Item) Delete(ctx *gin.Context) {
 
 }
 
-
-//item 资源文件上传
+// item 资源文件上传
 func (e Item) Upload(ctx *gin.Context) {
 	form, _ := ctx.MultipartForm()
 	files := form.File["Files[]"]
@@ -154,10 +153,10 @@ func (e Item) Upload(ctx *gin.Context) {
 	//上传文件到七牛
 	//保存上传进度persistId
 	//保存所有信息到db
-	for _,fileHeader := range files {
+	for _, fileHeader := range files {
 		fileHeader := fileHeader
 		go func() {
-			key, m3u8Key, e:= qiniu.UploadItemResc(fileHeader, req.Type, req.ItemID)
+			key, m3u8Key, e := qiniu.UploadItemResc(fileHeader, req.Type, req.ItemID)
 			if e != nil {
 				return
 			}
@@ -169,7 +168,7 @@ func (e Item) Upload(ctx *gin.Context) {
 				file.QnLink = qiniu.GetPrivateUrl(key)
 				file.Key = key
 			}
-			name,format :=tool.ParseFileName(fileHeader.Filename)
+			name, format := tool.ParseFileName(fileHeader.Filename)
 			file.Size = float32(fileHeader.Size)
 			file.Format = format
 			file.Type = req.Type

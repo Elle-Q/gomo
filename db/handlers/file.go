@@ -3,8 +3,8 @@ package handlers
 import (
 	"database/sql"
 	"fmt"
-	"gomo/db"
-	"gomo/db/models"
+	"leetroll/db"
+	"leetroll/db/models"
 	"time"
 )
 
@@ -12,7 +12,7 @@ type FileHandler struct {
 	db.Handler
 }
 
-//根据item_id查找所有文件
+// 根据item_id查找所有文件
 func (h *FileHandler) QueryByItemId(itemId int, list *[]models.File) *FileHandler {
 
 	rows, err := h.DB.Query("select id, type, item_id, name, size, format, bucket, key, mark1, update_time, create_time from public.file where item_id=$1", itemId)
@@ -33,7 +33,7 @@ func (h *FileHandler) QueryByItemId(itemId int, list *[]models.File) *FileHandle
 
 }
 
-//根据ids查找所有文件
+// 根据ids查找所有文件
 func (h *FileHandler) QueryByIds(ids string, list *[]models.File) *FileHandler {
 
 	sql := fmt.Sprintf("select id, type, item_id, name,size,format,bucket,key,mark1, update_time,create_time from public.file where id IN(%s)", ids)
@@ -56,7 +56,7 @@ func (h *FileHandler) QueryByIds(ids string, list *[]models.File) *FileHandler {
 
 }
 
-//所有文件
+// 所有文件
 func (h *FileHandler) List(list *[]models.File) *FileHandler {
 
 	rows, err := h.DB.Query("select id, type, item_id, name,qn_link,size,format,bucket,key,update_time, create_time from public.file")
@@ -77,7 +77,7 @@ func (h *FileHandler) List(list *[]models.File) *FileHandler {
 
 }
 
-//所有文件
+// 所有文件
 func (h *FileHandler) Save(model *models.File) *FileHandler {
 	returnID := 0
 	sqlS := "insert into public.file(item_id, type, name, size, format, bucket, key, mark1, update_time, create_time) " +
@@ -93,7 +93,7 @@ func (h *FileHandler) Save(model *models.File) *FileHandler {
 		"",
 		time.Now(),
 		time.Now(),
-		) .Scan(&returnID)
+	).Scan(&returnID)
 
 	if err != nil {
 		_ = h.AddError(err)
@@ -104,7 +104,7 @@ func (h *FileHandler) Save(model *models.File) *FileHandler {
 
 }
 
-func (h *FileHandler) Delete(id int) *FileHandler{
+func (h *FileHandler) Delete(id int) *FileHandler {
 	sql := "delete from public.file where id=$1"
 
 	_, err := h.DB.Exec(sql, id)
@@ -116,9 +116,8 @@ func (h *FileHandler) Delete(id int) *FileHandler{
 	return h
 }
 
-
-//解析rows为list
-func parseRows(rows *sql.Rows, list *[]models.File) (err error){
+// 解析rows为list
+func parseRows(rows *sql.Rows, list *[]models.File) (err error) {
 	for rows.Next() {
 		file := models.File{}
 		err := rows.Scan(

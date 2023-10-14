@@ -2,19 +2,19 @@ package api
 
 import (
 	"github.com/gin-gonic/gin"
-	"gomo/app/service"
-	"gomo/app/service/dto"
-	"gomo/app/service/vo"
-	"gomo/common/apis"
-	"gomo/db/handlers"
-	"gomo/db/models"
+	"leetroll/app/service"
+	"leetroll/app/service/dto"
+	"leetroll/app/service/vo"
+	"leetroll/common/apis"
+	"leetroll/db/handlers"
+	"leetroll/db/models"
 )
 
 type Item struct {
 	apis.Api
 }
 
-//根据itemId查询iten明细
+// 根据itemId查询iten明细
 func (e Item) Get(ctx *gin.Context) {
 	req := dto.ItemIDReq{}
 	handler := handlers.ItemHandler{}
@@ -37,7 +37,7 @@ func (e Item) Get(ctx *gin.Context) {
 	e.OK(item, "ok")
 }
 
-//根据itemId查询文件明细
+// 根据itemId查询文件明细
 func (e Item) GetItemAndFilesByItemId(ctx *gin.Context) {
 	req := dto.ItemIDReq{}
 	itemService := service.NewItemService()

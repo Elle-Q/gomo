@@ -1,8 +1,8 @@
 package handlers
 
 import (
-	"gomo/db"
-	"gomo/db/models"
+	"leetroll/db"
+	"leetroll/db/models"
 )
 
 type ConfigHandler struct {

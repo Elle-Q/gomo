@@ -1,14 +1,14 @@
 package cmd
 
 import (
-	"gomo/cmd/config"
-	"gomo/cmd/server"
+	"leetroll/cmd/config"
+	"leetroll/cmd/server"
 	"os"
 
 	//"errors"
 	"fmt"
 	"github.com/spf13/cobra"
-	"gomo/tool"
+	"leetroll/tool"
 )
 
 var rootCmd = &cobra.Command{

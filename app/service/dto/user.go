@@ -1,7 +1,7 @@
 package dto
 
 import (
-	"gomo/db/models"
+	"leetroll/db/models"
 	"time"
 )
 
@@ -14,15 +14,15 @@ func (s *UserApiReq) GetId() int {
 }
 
 type UserUpdateApiReq struct {
-	Id int `json:"id"`
-	Name string `json:"Name"`
+	Id      int    `json:"id"`
+	Name    string `json:"Name"`
 	Address string `json:"Address"`
-	Gender string `json:"Gender"`
-	Moto string `json:"Moto"`
-	Status string `json:"Status"`
+	Gender  string `json:"Gender"`
+	Moto    string `json:"Moto"`
+	Status  string `json:"Status"`
 }
 
-func (u *UserUpdateApiReq) Generate() models.User{
+func (u *UserUpdateApiReq) Generate() models.User {
 	user := models.User{}
 	user.ID = u.Id
 	user.Name = u.Name
@@ -30,7 +30,7 @@ func (u *UserUpdateApiReq) Generate() models.User{
 	user.Gender = u.Gender
 	user.Moto = u.Moto
 	user.Status = u.Status
-	user.UpdateTime=time.Now()
+	user.UpdateTime = time.Now()
 	return user
 }
 
@@ -44,11 +44,11 @@ type UserTokenRefreshApiReq struct {
 }
 
 type UserUpdateAvatarApiReq struct {
-	ID int `json:"UserId"`
-	Avatar  string  `json:"Avatar" comment:"头像"`
+	ID     int    `json:"UserId"`
+	Avatar string `json:"Avatar" comment:"头像"`
 }
 
 type UserUpdateBGApiReq struct {
-	ID int `json:"UserId"`
-	BgImag  string  `json:"BgImag" comment:"背景"`
+	ID     int    `json:"UserId"`
+	BgImag string `json:"BgImag" comment:"背景"`
 }

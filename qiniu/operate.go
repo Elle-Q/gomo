@@ -4,15 +4,15 @@ import (
 	"fmt"
 	"github.com/qiniu/go-sdk/v7/auth/qbox"
 	"github.com/qiniu/go-sdk/v7/storage"
-	"gomo/config"
-	"gomo/qiniu/regular"
-	"gomo/qiniu/video"
-	"gomo/tool"
+	"leetroll/config"
+	"leetroll/qiniu/regular"
+	"leetroll/qiniu/video"
+	"leetroll/tool"
 	"mime/multipart"
 	"strings"
 )
 
-//删除文件
+// 删除文件
 func DeleteFile(bucket string, key string) error {
 	bucketManager := getBucketManager()
 	err := bucketManager.Delete(bucket, key)
@@ -23,9 +23,8 @@ func DeleteFile(bucket string, key string) error {
 	return nil
 }
 
-
-//上传item资源文件
-func UploadItemResc(fileHeader *multipart.FileHeader, rescType string, itemId int) (string, string, error){
+// 上传item资源文件
+func UploadItemResc(fileHeader *multipart.FileHeader, rescType string, itemId int) (string, string, error) {
 
 	//文件格式
 	format := fileHeader.Header.Get("Content-Type")
@@ -43,14 +42,14 @@ func UploadItemResc(fileHeader *multipart.FileHeader, rescType string, itemId in
 	if tool.IsVideo(format) {
 		//分片文件的m3u8文件名称
 		palinName := strings.Split(fileName, ".")[0]
-		m3u8Key = fmt.Sprintf("%s/%s.m3u8", prefix,palinName)
+		m3u8Key = fmt.Sprintf("%s/%s.m3u8", prefix, palinName)
 		persistentID, err = video.UploadVideoForHLSFromFile(file, fileHeader.Size, key, m3u8Key) //上传视频
 	} else {
-		persistentID, err = regular.UploadFilePrivate(file,fileHeader.Size, key) //上传普通文件
+		persistentID, err = regular.UploadFilePrivate(file, fileHeader.Size, key) //上传普通文件
 	}
 	if err != nil {
 		fmt.Println("上传出错: ", err)
-		return "","", err
+		return "", "", err
 	}
 	//保存文件上传处理单号(PersistID) => db
 	fmt.Println("提交PersistentID到数据库 >>> ", persistentID)

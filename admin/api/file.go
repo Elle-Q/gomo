@@ -3,16 +3,15 @@ package api
 import (
 	"github.com/gin-gonic/gin"
 	"github.com/gin-gonic/gin/binding"
-	service "gomo/admin/service"
-	"gomo/admin/service/dto"
-	"gomo/common/apis"
-	"gomo/db/handlers"
+	service "leetroll/admin/service"
+	"leetroll/admin/service/dto"
+	"leetroll/common/apis"
+	"leetroll/db/handlers"
 )
 
 type File struct {
 	apis.Api
 }
-
 
 func (e File) DeleteQNFile(ctx *gin.Context) {
 	req := dto.ItemFileDelReq{}
@@ -22,7 +21,7 @@ func (e File) DeleteQNFile(ctx *gin.Context) {
 	}
 	err := e.MakeContext(ctx).
 		MakeDB().
-		Bind(&req,binding.JSON).
+		Bind(&req, binding.JSON).
 		MakeService(&fileService.FileHandler.Handler).
 		Errors
 	if err != nil {

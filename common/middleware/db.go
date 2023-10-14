@@ -2,7 +2,7 @@ package middleware
 
 import (
 	"github.com/gin-gonic/gin"
-	"gomo/common/runtime"
+	"leetroll/common/runtime"
 )
 
 func WithContextDb(c *gin.Context) {

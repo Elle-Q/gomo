@@ -4,13 +4,13 @@ import (
 	"fmt"
 	"github.com/dgrijalva/jwt-go"
 	"github.com/dgrijalva/jwt-go/request"
-	"gomo/common/runtime"
-	"gomo/config"
+	"leetroll/common/runtime"
+	"leetroll/config"
 	"net/http"
 	"strconv"
 )
 
-func VerifyToken(r *http.Request)  (*jwt.Token, error){
+func VerifyToken(r *http.Request) (*jwt.Token, error) {
 	tokenString, _ := request.AuthorizationHeaderExtractor.ExtractToken(r)
 	token, err := ParseToken(tokenString, config.JWTConfig.AccessSecret)
 	if err != nil {
@@ -19,7 +19,7 @@ func VerifyToken(r *http.Request)  (*jwt.Token, error){
 	return token, nil
 }
 
-func ParseToken(tokenString string, secret string)  (*jwt.Token, error){
+func ParseToken(tokenString string, secret string) (*jwt.Token, error) {
 	token, err := jwt.Parse(tokenString, func(token *jwt.Token) (interface{}, error) {
 		//Make sure that the token method conform to "SigningMethodHMAC"
 		if _, ok := token.Method.(*jwt.SigningMethodHMAC); !ok {
@@ -44,10 +44,9 @@ func TokenValid(r *http.Request) error {
 	return nil
 }
 
-
 type AccessDetails struct {
 	AccessUuid string
-	UserId   uint64
+	UserId     uint64
 }
 
 func ExtractTokenMetadata(r *http.Request) (*AccessDetails, error) {
@@ -67,7 +66,7 @@ func ExtractTokenMetadata(r *http.Request) (*AccessDetails, error) {
 		}
 		return &AccessDetails{
 			AccessUuid: accessUuid,
-			UserId:   userId,
+			UserId:     userId,
 		}, nil
 	}
 	return nil, err

@@ -2,15 +2,15 @@ package main
 
 import (
 	"fmt"
-	"gomo/common/runtime"
-	"gomo/config"
-	"gomo/db/handlers"
-	"gomo/db/models"
-	"gomo/qiniu"
-	"gomo/qiniu/regular"
-	"gomo/tool"
 	"io/fs"
 	"io/ioutil"
+	"leetroll/common/runtime"
+	"leetroll/config"
+	"leetroll/db/handlers"
+	"leetroll/db/models"
+	"leetroll/qiniu"
+	"leetroll/qiniu/regular"
+	"leetroll/tool"
 	"log"
 	"path/filepath"
 	"strings"
@@ -19,8 +19,8 @@ import (
 
 var wg sync.WaitGroup
 
-//上传本地文件夹, 并保存文件信息到数据库 (一些配置类数据)
-func UploadLocalDir(typeConfig string, dir string)  {
+// 上传本地文件夹, 并保存文件信息到数据库 (一些配置类数据)
+func UploadLocalDir(typeConfig string, dir string) {
 	fmt.Printf(tool.Red("==================准备上传 '%s'===================="), typeConfig)
 	tool.PrettyPrint(*config.QiniuConfig)
 
@@ -60,8 +60,8 @@ func UploadLocalDir(typeConfig string, dir string)  {
 	fmt.Println(tool.Red("完成"))
 }
 
-//fixme:未完成的方法 (更新数据库七牛资源的有效时间) [暂时不用]
-func UpdateLinkExpirrationInDB()  {
+// fixme:未完成的方法 (更新数据库七牛资源的有效时间) [暂时不用]
+func UpdateLinkExpirrationInDB() {
 	//查找所有file, 对私有空间的file进行处理
 	fmt.Printf(tool.Red("==================准备更新私有空间文件有效期 '%s'===================="))
 	tool.PrettyPrint(*config.QiniuConfig)
@@ -77,7 +77,7 @@ func UpdateLinkExpirrationInDB()  {
 	}
 
 }
-func makFileModel(file fs.FileInfo , model *models.File) {
+func makFileModel(file fs.FileInfo, model *models.File) {
 	model.ItemId = 0
 	model.Format = filepath.Ext(file.Name())
 	model.Name = file.Name()[:strings.Index(file.Name(), ".")]

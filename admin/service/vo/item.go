@@ -1,7 +1,7 @@
 package vo
 
 import (
-	"gomo/db/models"
+	"leetroll/db/models"
 	"time"
 )
 

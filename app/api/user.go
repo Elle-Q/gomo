@@ -5,12 +5,12 @@ import (
 	"github.com/dgrijalva/jwt-go"
 	"github.com/gin-gonic/gin"
 	"github.com/gin-gonic/gin/binding"
-	"gomo/app/service/dto"
-	"gomo/auth"
-	"gomo/common/apis"
-	"gomo/config"
-	"gomo/db/handlers"
-	"gomo/db/models"
+	"leetroll/app/service/dto"
+	"leetroll/auth"
+	"leetroll/common/apis"
+	"leetroll/config"
+	"leetroll/db/handlers"
+	"leetroll/db/models"
 	"log"
 	"net/http"
 	"strconv"
@@ -20,7 +20,7 @@ type User struct {
 	apis.Api
 }
 
-//查询用户信息
+// 查询用户信息
 func (e User) GetUser(ctx *gin.Context) {
 	req := dto.UserApiReq{}
 	service := handlers.UserHandler{}
@@ -96,7 +96,6 @@ func (e User) UpdateUserAvatar(ctx *gin.Context) {
 	e.OK(nil, "ok")
 }
 
-
 func (e User) UpdateUserBG(ctx *gin.Context) {
 	req := dto.UserUpdateBGApiReq{}
 	service := handlers.UserHandler{}
@@ -120,7 +119,7 @@ func (e User) UpdateUserBG(ctx *gin.Context) {
 	e.OK(nil, "ok")
 }
 
-//登录
+// 登录
 func (e User) Login(ctx *gin.Context) {
 	req := dto.UserLoginApiReq{}
 	service := handlers.UserHandler{}
@@ -158,7 +157,7 @@ func (e User) Login(ctx *gin.Context) {
 	}
 
 	resp := map[string]interface{}{
-		"User": user,
+		"User":         user,
 		"AccessToken":  token.AccessToken,
 		"RefreshToken": token.RefreshToken,
 	}
@@ -166,7 +165,7 @@ func (e User) Login(ctx *gin.Context) {
 
 }
 
-//登出
+// 登出
 func (e User) Logout(c *gin.Context) {
 	au, err := auth.ExtractTokenMetadata(c.Request)
 	if err != nil {
@@ -181,7 +180,7 @@ func (e User) Logout(c *gin.Context) {
 	e.OK(http.StatusOK, "Successfully logged out")
 }
 
-//token刷新
+// token刷新
 func (e User) Refresh(ctx *gin.Context) {
 	req := dto.UserTokenRefreshApiReq{}
 	err := e.MakeContext(ctx).

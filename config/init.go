@@ -5,10 +5,10 @@ import (
 	"fmt"
 	"github.com/go-redis/redis/v7"
 	_ "github.com/lib/pq"
-	"gomo/common/runtime"
+	"leetroll/common/runtime"
 )
 
-//初始化数据库
+// 初始化数据库
 func InitDB() {
 	_cfg := DatabaseConfig
 
@@ -35,21 +35,20 @@ func InitDB() {
 	}
 }
 
-//初始化redis
+// 初始化redis
 func InitRedis() {
 	_cfg := RedisConfig
 
 	//Initializing redis
 
 	client := redis.NewClient(&redis.Options{
-		Addr: _cfg.Address,
+		Addr:     _cfg.Address,
 		Password: _cfg.Password,
-		DB: _cfg.DB,
+		DB:       _cfg.DB,
 	})
 
 	//设置全局
 	runtime.App.SetRedis(client)
-
 
 	_, err := client.Ping().Result()
 	if err != nil {

@@ -2,17 +2,17 @@ package router
 
 import (
 	"github.com/gin-gonic/gin"
-	"gomo/common/runtime"
+	"leetroll/common/runtime"
 	"log"
 	"os"
 )
 
 var (
 	routerNoCheckRole = make([]func(*gin.RouterGroup), 0)
-	routerCheckRole = make([]func(*gin.RouterGroup), 0)
+	routerCheckRole   = make([]func(*gin.RouterGroup), 0)
 )
 
-func InitAppRouter()  {
+func InitAppRouter() {
 	var r *gin.Engine
 	h := runtime.App.GetEngine()
 	if h == nil {
@@ -20,7 +20,7 @@ func InitAppRouter()  {
 		os.Exit(-1)
 	}
 	switch h.(type) {
-	case *gin.Engine :
+	case *gin.Engine:
 		r = h.(*gin.Engine)
 	default:
 		log.Fatal("not support regular engine")
@@ -41,11 +41,11 @@ func noCheckRoleRouter(r *gin.Engine) {
 
 	v1 := r.Group("app")
 
-	for _,f := range routerNoCheckRole{
+	for _, f := range routerNoCheckRole {
 		f(v1)
 	}
 
-	for _,f := range routerCheckRole{
+	for _, f := range routerCheckRole {
 		f(v1)
 	}
 }

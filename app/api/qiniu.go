@@ -2,9 +2,9 @@ package api
 
 import (
 	"github.com/gin-gonic/gin"
-	"gomo/common/apis"
-	"gomo/config"
-	"gomo/qiniu/regular"
+	"leetroll/common/apis"
+	"leetroll/config"
+	"leetroll/qiniu/regular"
 )
 
 type Qiniu struct {
@@ -16,8 +16,7 @@ func (q Qiniu) GetPubUpToken(ctx *gin.Context) {
 	token := regular.GetToken(config.QiniuConfig.PubBucket)
 	resp := map[string]string{
 		"UpToken": token,
-		"Domain": config.QiniuConfig.PubDomain,
+		"Domain":  config.QiniuConfig.PubDomain,
 	}
 	q.OK(resp, "ok")
 }
-

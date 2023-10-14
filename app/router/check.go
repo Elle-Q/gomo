@@ -2,12 +2,12 @@ package router
 
 import (
 	"github.com/gin-gonic/gin"
-	"gomo/app/api"
-	"gomo/common/actions"
-	"gomo/common/middleware"
+	"leetroll/app/api"
+	"leetroll/common/actions"
+	"leetroll/common/middleware"
 )
 
-func init()  {
+func init() {
 	routerCheckRole = append(routerCheckRole, registerCheckRouter)
 }
 

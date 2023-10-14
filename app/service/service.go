@@ -1,20 +1,19 @@
 package service
 
 import (
-	"gomo/db/handlers"
+	"leetroll/db/handlers"
 )
 
-func NewCatItemService() CatItemService{
+func NewCatItemService() CatItemService {
 	return CatItemService{
 		ItemHandler: &handlers.ItemHandler{},
-		CatHandler: &handlers.CatHandler{},
+		CatHandler:  &handlers.CatHandler{},
 	}
 }
 
-func NewItemService() ItemService{
+func NewItemService() ItemService {
 	return ItemService{
 		ItemHandler: &handlers.ItemHandler{},
 		FileHandler: &handlers.FileHandler{},
 	}
 }
-

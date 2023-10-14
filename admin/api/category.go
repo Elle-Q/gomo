@@ -3,11 +3,11 @@ package api
 import (
 	"github.com/gin-gonic/gin"
 	"github.com/gin-gonic/gin/binding"
-	"gomo/admin/service/dto"
-	"gomo/admin/service/vo"
-	"gomo/common/apis"
-	"gomo/db/handlers"
-	"gomo/db/models"
+	"leetroll/admin/service/dto"
+	"leetroll/admin/service/vo"
+	"leetroll/common/apis"
+	"leetroll/db/handlers"
+	"leetroll/db/models"
 )
 
 type Category struct {
@@ -62,7 +62,6 @@ func (e Category) ListName(ctx *gin.Context) {
 
 }
 
-
 func (e Category) Update(ctx *gin.Context) {
 	req := dto.CatUpdateReq{}
 	service := handlers.CatHandler{}
@@ -78,7 +77,7 @@ func (e Category) Update(ctx *gin.Context) {
 	}
 
 	Cat := models.Category{}
-	err =  req.Generate(&Cat)
+	err = req.Generate(&Cat)
 	if err != nil {
 		e.Error(500, err, "")
 		return
@@ -94,7 +93,7 @@ func (e Category) Update(ctx *gin.Context) {
 
 }
 
-//删除分类
+// 删除分类
 func (e Category) Delete(ctx *gin.Context) {
 	req := dto.CatDeleteApiReq{}
 	service := handlers.CatHandler{}
@@ -115,6 +114,5 @@ func (e Category) Delete(ctx *gin.Context) {
 		return
 	}
 
-	e.OK(req.GetDeleteId(),"ok")
+	e.OK(req.GetDeleteId(), "ok")
 }
-

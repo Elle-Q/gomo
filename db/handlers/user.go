@@ -1,9 +1,9 @@
 package handlers
 
 import (
-	"gomo/app/service/dto"
-	"gomo/db"
-	"gomo/db/models"
+	"leetroll/app/service/dto"
+	"leetroll/db"
+	"leetroll/db/models"
 )
 
 type UserHandler struct {
@@ -98,8 +98,8 @@ func (h *UserHandler) List(list *[]models.User) *UserHandler {
 	return h
 }
 
-//更新用户信息
-func (h *UserHandler) Update(model *models.User) *UserHandler{
+// 更新用户信息
+func (h *UserHandler) Update(model *models.User) *UserHandler {
 	sql := "update public.user set Name=$1, Address=$2, Gender=$3, Status=$4, Moto=$5, update_time=$6 where id = $7"
 	_, err := h.DB.Exec(sql,
 		&model.Name,
@@ -117,8 +117,8 @@ func (h *UserHandler) Update(model *models.User) *UserHandler{
 	return h
 }
 
-//用户注册
-func (h *UserHandler) Register(model *models.User) *UserHandler{
+// 用户注册
+func (h *UserHandler) Register(model *models.User) *UserHandler {
 	sql := "insert into public.user(Phone, Name) values($1, $2)"
 	_, err := h.DB.Exec(sql,
 		&model.Phone,
@@ -131,11 +131,10 @@ func (h *UserHandler) Register(model *models.User) *UserHandler{
 	return h
 }
 
-
-//修改绑定手机
-func (h *UserHandler) updatePhone(phone string, id int) *UserHandler{
+// 修改绑定手机
+func (h *UserHandler) updatePhone(phone string, id int) *UserHandler {
 	sql := "update public.user set Phone= $1 where id=$2"
-	_, err := h.DB.Exec(sql,phone, id)
+	_, err := h.DB.Exec(sql, phone, id)
 
 	if err != nil {
 		_ = h.AddError(err)
@@ -144,11 +143,10 @@ func (h *UserHandler) updatePhone(phone string, id int) *UserHandler{
 	return h
 }
 
-
-//修改绑定微信
-func (h *UserHandler) updateQRCode(QRCode string, id int) *UserHandler{
+// 修改绑定微信
+func (h *UserHandler) updateQRCode(QRCode string, id int) *UserHandler {
 	sql := "update public.user set QRCode= $1 where id=$2"
-	_, err := h.DB.Exec(sql,QRCode, id)
+	_, err := h.DB.Exec(sql, QRCode, id)
 
 	if err != nil {
 		_ = h.AddError(err)
@@ -157,10 +155,10 @@ func (h *UserHandler) updateQRCode(QRCode string, id int) *UserHandler{
 	return h
 }
 
-//设置vip
-func (h *UserHandler) updateVip(vip bool, id int) *UserHandler{
+// 设置vip
+func (h *UserHandler) updateVip(vip bool, id int) *UserHandler {
 	sql := "update public.user set vip= $1 where id=$2"
-	_, err := h.DB.Exec(sql,vip, id)
+	_, err := h.DB.Exec(sql, vip, id)
 
 	if err != nil {
 		_ = h.AddError(err)
@@ -169,8 +167,7 @@ func (h *UserHandler) updateVip(vip bool, id int) *UserHandler{
 	return h
 }
 
-
-func (h *UserHandler) FindUserByPhone(u *dto.UserLoginApiReq, model *models.User) *UserHandler{
+func (h *UserHandler) FindUserByPhone(u *dto.UserLoginApiReq, model *models.User) *UserHandler {
 
 	row := h.DB.QueryRow("select id, name, phone,avatar, qr_code,address,gender,vip,bg_imag,admin from public.user where phone=$1", u.UserName)
 
@@ -192,10 +189,10 @@ func (h *UserHandler) FindUserByPhone(u *dto.UserLoginApiReq, model *models.User
 	return h
 }
 
-//更新用户头像
+// 更新用户头像
 func (h *UserHandler) UpdateAvatar(id int, link string) *UserHandler {
 	sql := "update public.user set avatar= $1 where id=$2"
-	_, err := h.DB.Exec(sql,link, id)
+	_, err := h.DB.Exec(sql, link, id)
 
 	if err != nil {
 		_ = h.AddError(err)
@@ -204,10 +201,10 @@ func (h *UserHandler) UpdateAvatar(id int, link string) *UserHandler {
 	return h
 }
 
-//更新用户背景
+// 更新用户背景
 func (h *UserHandler) UpdateBG(id int, link string) *UserHandler {
 	sql := "update public.user set bg_imag= $1 where id=$2"
-	_, err := h.DB.Exec(sql,link, id)
+	_, err := h.DB.Exec(sql, link, id)
 
 	if err != nil {
 		_ = h.AddError(err)

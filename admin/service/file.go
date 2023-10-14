@@ -1,18 +1,18 @@
 package service
 
 import (
-	"gomo/admin/service/dto"
-	"gomo/db/handlers"
-	"gomo/qiniu"
+	"leetroll/admin/service/dto"
+	"leetroll/db/handlers"
+	"leetroll/qiniu"
 )
 
 type FileService struct {
 	ItemHandler *handlers.ItemHandler
 	FileHandler *handlers.FileHandler
-	Error error
+	Error       error
 }
 
-func (e *FileService) DeleteFile(req dto.ItemFileDelReq) *FileService{
+func (e *FileService) DeleteFile(req dto.ItemFileDelReq) *FileService {
 	fileHandler := e.FileHandler
 
 	//删除七牛文件

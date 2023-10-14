@@ -1,6 +1,6 @@
 package main
 
-import "gomo/cmd"
+import "leetroll/cmd"
 
 func main() {
 	cmd.Execute()

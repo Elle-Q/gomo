@@ -5,18 +5,18 @@ import (
 	"fmt"
 	"github.com/gin-gonic/gin"
 	"github.com/gin-gonic/gin/binding"
-	"gomo/common/response"
-	"gomo/db"
-	"gomo/tool"
+	"leetroll/common/response"
+	"leetroll/db"
+	"leetroll/tool"
 )
 
 type Api struct {
 	Context *gin.Context
-	DB *sql.DB
-	Errors error
+	DB      *sql.DB
+	Errors  error
 }
 
-func (e *Api) AddError(err error)  {
+func (e *Api) AddError(err error) {
 	if e.Errors == nil {
 		e.Errors = err
 	} else {
@@ -24,12 +24,12 @@ func (e *Api) AddError(err error)  {
 	}
 }
 
-func (e *Api) MakeContext(c *gin.Context)  *Api{
+func (e *Api) MakeContext(c *gin.Context) *Api {
 	e.Context = c
 	return e
 }
 
-func (e Api) GetDB() (*sql.DB, error){
+func (e Api) GetDB() (*sql.DB, error) {
 	db, err := tool.GetDB(e.Context)
 	if err != nil {
 		e.Error(500, err, "数据库连接获取失败")
@@ -38,8 +38,7 @@ func (e Api) GetDB() (*sql.DB, error){
 	return db, nil
 }
 
-
-func (e *Api) MakeDB() *Api{
+func (e *Api) MakeDB() *Api {
 	db, err := tool.GetDB(e.Context)
 	if err != nil {
 		e.AddError(err)

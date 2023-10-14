@@ -2,7 +2,7 @@ package dto
 
 import (
 	"errors"
-	"gomo/db/models"
+	"leetroll/db/models"
 	"time"
 )
 

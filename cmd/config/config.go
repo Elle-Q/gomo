@@ -4,12 +4,12 @@ import (
 	"encoding/json"
 	"fmt"
 	"github.com/spf13/cobra"
-	"gomo/config"
+	"leetroll/config"
 )
 
 var (
 	configYml      string
-	ConfigStartCmd = &cobra.Command {
+	ConfigStartCmd = &cobra.Command{
 		Use:     "config",
 		Short:   "Get Application config info",
 		Example: "gomo config -c config/config.yml",
@@ -22,7 +22,7 @@ var (
 	}
 )
 
-//初始化操作
+// 初始化操作
 func setup() {
 
 	//1. 读取配置
@@ -48,4 +48,3 @@ func run() {
 	}
 	fmt.Println("application:", string(application))
 }
-

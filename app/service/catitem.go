@@ -1,19 +1,18 @@
 package service
 
 import (
-	"gomo/app/service/vo"
-	"gomo/db/handlers"
-	"gomo/db/models"
+	"leetroll/app/service/vo"
+	"leetroll/db/handlers"
+	"leetroll/db/models"
 )
-
 
 type CatItemService struct {
 	ItemHandler *handlers.ItemHandler
-	CatHandler *handlers.CatHandler
-	Error error
+	CatHandler  *handlers.CatHandler
+	Error       error
 }
 
-func (c *CatItemService) ListCatsWithItems(vos *[]vo.SubjectVO) *CatItemService{
+func (c *CatItemService) ListCatsWithItems(vos *[]vo.SubjectVO) *CatItemService {
 	itemHandler := c.ItemHandler
 	catHandler := c.CatHandler
 

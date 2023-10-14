@@ -1,19 +1,19 @@
 package service
 
 import (
-	"gomo/app/service/vo"
-	"gomo/db/handlers"
-	"gomo/db/models"
-	"gomo/qiniu"
+	"leetroll/app/service/vo"
+	"leetroll/db/handlers"
+	"leetroll/db/models"
+	"leetroll/qiniu"
 )
 
 type ItemService struct {
 	ItemHandler *handlers.ItemHandler
 	FileHandler *handlers.FileHandler
-	Error error
+	Error       error
 }
 
-func (e *ItemService) GetItemAndFilesByItemId(ID int, vo *vo.ItemWithFilesVO) *ItemService{
+func (e *ItemService) GetItemAndFilesByItemId(ID int, vo *vo.ItemWithFilesVO) *ItemService {
 	itemHandler := e.ItemHandler
 	fileHandler := e.FileHandler
 
@@ -33,7 +33,7 @@ func (e *ItemService) GetItemAndFilesByItemId(ID int, vo *vo.ItemWithFilesVO) *I
 	prev := make([]models.File, 0)
 	refs := make([]models.File, 0)
 
-	for _, f := range files{
+	for _, f := range files {
 		p := &f
 		p.QnLink = qiniu.GetPrivateUrl(f.Key)
 		switch f.Type {

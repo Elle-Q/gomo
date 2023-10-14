@@ -5,17 +5,17 @@ import (
 	"fmt"
 	"github.com/qiniu/go-sdk/v7/auth/qbox"
 	"github.com/qiniu/go-sdk/v7/storage"
-	"gomo/config"
+	"leetroll/config"
 	"mime/multipart"
 	"os"
 )
 
-func UploadLocal(filePath string, fileName string, name string) (link string){
+func UploadLocal(filePath string, fileName string, name string) (link string) {
 	//get upToken
 	upToken := GetToken(config.QiniuConfig.PubBucket)
 
 	//make key (timestamp)
-	key := fmt.Sprintf("%s/%s/%s", "config",name, fileName)
+	key := fmt.Sprintf("%s/%s/%s", "config", name, fileName)
 
 	cfg := storage.Config{}
 	cfg.Zone = &storage.ZoneXinjiapo
@@ -40,19 +40,19 @@ func UploadLocal(filePath string, fileName string, name string) (link string){
 	return key
 }
 
-func UploadFilePub(file multipart.File,len int64, key string) (string, error){
+func UploadFilePub(file multipart.File, len int64, key string) (string, error) {
 	//get upToken
 	upToken := GetToken(config.QiniuConfig.PubBucket)
-	return uploadFile(file,len,key, upToken)
+	return uploadFile(file, len, key, upToken)
 }
 
-func UploadFilePrivate(file multipart.File,len int64, key string) (string, error){
+func UploadFilePrivate(file multipart.File, len int64, key string) (string, error) {
 	//get upToken
 	upToken := GetToken(config.QiniuConfig.VideoBucket)
-	return uploadFile(file,len,key, upToken)
+	return uploadFile(file, len, key, upToken)
 }
 
-func uploadFile(file multipart.File,len int64, key string, token string) (string, error){
+func uploadFile(file multipart.File, len int64, key string, token string) (string, error) {
 
 	//cfg
 	cfg := storage.Config{}
@@ -65,7 +65,7 @@ func uploadFile(file multipart.File,len int64, key string, token string) (string
 
 	putExtra := storage.PutExtra{
 		Params: map[string]string{
-			"x:name": "avatar",  //啊啊啊啊啊啊~
+			"x:name": "avatar", //啊啊啊啊啊啊~
 		},
 	}
 	err := formUploader.Put(context.Background(), &ret, token, key, file, len, &putExtra)
@@ -78,7 +78,7 @@ func uploadFile(file multipart.File,len int64, key string, token string) (string
 	return ret.PersistentID, err
 }
 
-func DeleteFile(key string)  {
+func DeleteFile(key string) {
 
 }
 
@@ -94,7 +94,6 @@ func getFileSize(file multipart.File) int64 {
 	return fileSize
 }
 
-
 func GetToken(bucket string) string {
 	accessKey := config.QiniuConfig.AK
 	secretKey := config.QiniuConfig.SK
@@ -105,7 +104,3 @@ func GetToken(bucket string) string {
 	upToken := putPolicy.UploadToken(mac)
 	return upToken
 }
-
-
-
-

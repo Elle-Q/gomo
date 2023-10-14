@@ -1,7 +1,7 @@
 package main
 
 import (
-	"gomo/config"
+	"leetroll/config"
 )
 
 func main() {

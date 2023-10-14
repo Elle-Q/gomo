@@ -3,9 +3,9 @@ package handlers
 import (
 	"database/sql"
 	"github.com/lib/pq"
-	"gomo/admin/service/dto"
-	"gomo/db"
-	"gomo/db/models"
+	"leetroll/admin/service/dto"
+	"leetroll/db"
+	"leetroll/db/models"
 	"strings"
 	"time"
 )

@@ -2,12 +2,12 @@ package middleware
 
 import (
 	"github.com/gin-gonic/gin"
-	"gomo/auth"
-	"gomo/common/response"
+	"leetroll/auth"
+	"leetroll/common/response"
 	"net/http"
 )
 
-func  AuthJWTMiddleware() gin.HandlerFunc  {
+func AuthJWTMiddleware() gin.HandlerFunc {
 	return func(c *gin.Context) {
 
 		err := auth.TokenValid(c.Request)
@@ -19,12 +19,12 @@ func  AuthJWTMiddleware() gin.HandlerFunc  {
 
 		tokenAuth, err := auth.ExtractTokenMetadata(c.Request)
 		if err != nil {
-			response.Error(c, http.StatusUnauthorized, err,"unauthorized")
+			response.Error(c, http.StatusUnauthorized, err, "unauthorized")
 			return
 		}
 		_, err = auth.FetchAuth(tokenAuth)
 		if err != nil {
-			response.Error(c, http.StatusUnauthorized, err,"unauthorized")
+			response.Error(c, http.StatusUnauthorized, err, "unauthorized")
 			return
 		}
 		c.Next()

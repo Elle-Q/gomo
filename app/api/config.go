@@ -2,11 +2,11 @@ package api
 
 import (
 	"github.com/gin-gonic/gin"
-	"gomo/app/service/dto"
-	"gomo/common/apis"
-	"gomo/db/handlers"
-	"gomo/db/models"
-	"gomo/qiniu"
+	"leetroll/app/service/dto"
+	"leetroll/common/apis"
+	"leetroll/db/handlers"
+	"leetroll/db/models"
+	"leetroll/qiniu"
 	"strconv"
 	"strings"
 )

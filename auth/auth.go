@@ -3,8 +3,8 @@ package auth
 import (
 	"github.com/dgrijalva/jwt-go"
 	"github.com/google/uuid"
-	"gomo/common/runtime"
-	"gomo/config"
+	"leetroll/common/runtime"
+	"leetroll/config"
 	"strconv"
 	"time"
 )
@@ -18,7 +18,7 @@ type Tokens struct {
 	RtExpires    int64
 }
 
-func CreateToken(ID int) (*Tokens,error) {
+func CreateToken(ID int) (*Tokens, error) {
 	tokens := &Tokens{}
 	tokens.AtExpires = time.Now().Add(time.Hour * 24).Unix()
 	tokens.AccessUuid = uuid.New().String()
@@ -54,7 +54,6 @@ func CreateToken(ID int) (*Tokens,error) {
 	return tokens, nil
 }
 
-
 func CreateAuth(userid uint64, tokens *Tokens) error {
 	at := time.Unix(tokens.AtExpires, 0)
 	rt := time.Unix(tokens.RtExpires, 0)
@@ -73,7 +72,7 @@ func CreateAuth(userid uint64, tokens *Tokens) error {
 	return nil
 }
 
-func DeleteAuth(uuid string) (int64,error) {
+func DeleteAuth(uuid string) (int64, error) {
 	client := runtime.App.GetRedis()
 	deleted, err := client.Del(uuid).Result()
 	if err != nil {
@@ -81,5 +80,3 @@ func DeleteAuth(uuid string) (int64,error) {
 	}
 	return deleted, nil
 }
-
-

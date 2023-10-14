@@ -2,12 +2,11 @@ package router
 
 import (
 	"github.com/gin-gonic/gin"
-	"gomo/app/api"
-	"gomo/common/actions"
+	"leetroll/app/api"
+	"leetroll/common/actions"
 )
 
-
-func init()  {
+func init() {
 	routerNoCheckRole = append(routerNoCheckRole, registerNoCheckRouter)
 }
 
@@ -30,7 +29,6 @@ func registerNoCheckRouter(g *gin.RouterGroup) {
 		user.POST("/login", _UserApi.Login)
 		user.POST("/refresh", _UserApi.Refresh)
 	}
-
 
 	_ConfigApi := api.Config{}
 	config := g.Group("/config").Use(actions.PermissionAction())

@@ -2,12 +2,12 @@ package api
 
 import (
 	"github.com/gin-gonic/gin"
-	"gomo/app/service"
-	"gomo/app/service/dto"
-	"gomo/app/service/vo"
-	"gomo/common/apis"
-	"gomo/db/handlers"
-	"gomo/db/models"
+	"leetroll/app/service"
+	"leetroll/app/service/dto"
+	"leetroll/app/service/vo"
+	"leetroll/common/apis"
+	"leetroll/db/handlers"
+	"leetroll/db/models"
 )
 
 type Category struct {
@@ -15,7 +15,7 @@ type Category struct {
 }
 
 func (e Category) List(ctx *gin.Context) {
-	catHandler :=handlers.CatHandler{}
+	catHandler := handlers.CatHandler{}
 	err := e.MakeContext(ctx).
 		MakeDB().
 		MakeService(&catHandler.Handler).
@@ -40,7 +40,7 @@ func (e Category) List(ctx *gin.Context) {
 
 func (e Category) Get(ctx *gin.Context) {
 	req := dto.CatApiReq{}
-	catHandler :=handlers.CatHandler{}
+	catHandler := handlers.CatHandler{}
 	err := e.MakeContext(ctx).
 		MakeDB().
 		Bind(&req, nil).
@@ -64,7 +64,7 @@ func (e Category) Get(ctx *gin.Context) {
 }
 
 func (e Category) ListCatsWithItems(ctx *gin.Context) {
-	catItemService :=service.NewCatItemService()
+	catItemService := service.NewCatItemService()
 	err := e.MakeContext(ctx).
 		MakeDB().
 		MakeService(&catItemService.ItemHandler.Handler).
@@ -86,4 +86,3 @@ func (e Category) ListCatsWithItems(ctx *gin.Context) {
 
 	e.OK(vos, "ok")
 }
-
