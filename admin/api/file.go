@@ -13,7 +13,8 @@ type File struct {
 	apis.Api
 }
 
-func (e File) DeleteQNFile(ctx *gin.Context) {
+// 删除文件  (七牛文件以及数据库记录)
+func (e File) DeleteFile(ctx *gin.Context) {
 	req := dto.ItemFileDelReq{}
 	fileService := service.FileService{
 		ItemHandler: &handlers.ItemHandler{},
@@ -28,7 +29,7 @@ func (e File) DeleteQNFile(ctx *gin.Context) {
 		e.Error(500, err, "")
 		return
 	}
-	err = fileService.DeleteFile(req).Error
+	err = fileService.DeleteFile(req.FileId, req.Bucket, req.Key).Error
 	if err != nil {
 		e.Error(500, err, "")
 		return

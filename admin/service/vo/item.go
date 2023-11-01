@@ -22,22 +22,11 @@ type ItemVO struct {
 }
 
 type ItemFilesVO struct {
-	ID       int64
-	ItemName string
-	RescType string
-	Main     []models.File
-	Refs     []models.File
-	Preview  []models.File
+	ID         int64
+	ItemName   string
+	RescType   string
+	Main       []models.File
+	Attachment []models.File
+	Preview    []models.File
+	Chapters   []ChapterVO
 }
-
-//
-//type ItemFile struct {
-//	ID     int64
-//	Name   string
-//	Type   string
-//	QnLink string
-//	Size   string
-//	Format string
-//	Bucket string
-//	Key    string
-//}

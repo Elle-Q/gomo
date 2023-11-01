@@ -1,7 +1,6 @@
 package qiniu
 
 import (
-	"fmt"
 	"github.com/qiniu/go-sdk/v7/auth"
 	"github.com/qiniu/go-sdk/v7/storage"
 	"leetroll/config"
@@ -12,7 +11,7 @@ import (
 func GetPubUrl(key string) string {
 	domain := config.QiniuConfig.PubDomain
 	publicAccessURL := storage.MakePublicURL(domain, key)
-	fmt.Println("公开空间访问链接为: ", publicAccessURL)
+	//fmt.Println("公开空间访问链接为: ", publicAccessURL)
 	return publicAccessURL
 }
 

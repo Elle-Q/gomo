@@ -1,13 +1,17 @@
 package models
 
-import "time"
+import (
+	"time"
+)
 
 type Item struct {
 	ID         int64
 	Cat        *Category
 	Name       string
 	Desc       string
+	Main       string
 	Preview    string
+	Attachment string
 	Type       string
 	BLink      string
 	Tags       []string

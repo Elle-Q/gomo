@@ -1,7 +1,6 @@
 package service
 
 import (
-	"leetroll/admin/service/dto"
 	"leetroll/db/handlers"
 	"leetroll/qiniu"
 )
@@ -12,17 +11,17 @@ type FileService struct {
 	Error       error
 }
 
-func (e *FileService) DeleteFile(req dto.ItemFileDelReq) *FileService {
+func (e *FileService) DeleteFile(fileId int, bucket string, key string) *FileService {
 	fileHandler := e.FileHandler
 
 	//删除七牛文件
-	err := qiniu.DeleteFile(req.Bucket, req.Key)
+	err := qiniu.DeleteFile(bucket, key)
 	if err != nil {
 		e.Error = err
 		return e
 	}
 	//删除数据库记录
-	err = fileHandler.Delete(req.FileId).Error
+	err = fileHandler.Delete(fileId).Error
 	e.Error = err
 	return e
 }

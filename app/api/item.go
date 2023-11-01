@@ -46,6 +46,7 @@ func (e Item) GetItemAndFilesByItemId(ctx *gin.Context) {
 		Bind(&req, nil).
 		MakeService(&itemService.ItemHandler.Handler).
 		MakeService(&itemService.FileHandler.Handler).
+		MakeService(&itemService.ChapterHandler.Handler).
 		Errors
 	if err != nil {
 		e.Error(500, err, "")
@@ -59,4 +60,30 @@ func (e Item) GetItemAndFilesByItemId(ctx *gin.Context) {
 		return
 	}
 	e.OK(itemVO, "ok")
+}
+
+// 根据itemId查询文件明细
+func (e Item) GetChapter(ctx *gin.Context) {
+	req := dto.ItemIDReq{}
+	itemService := service.NewItemService()
+	err := e.MakeContext(ctx).
+		MakeDB().
+		Bind(&req, nil).
+		MakeService(&itemService.ItemHandler.Handler).
+		MakeService(&itemService.FileHandler.Handler).
+		MakeService(&itemService.ChapterHandler.Handler).
+		Errors
+	if err != nil {
+		e.Error(500, err, "")
+		return
+	}
+
+	chapterVO := vo.ChapterVO{}
+
+	err = itemService.GetChapter(req.ID, &chapterVO).Error
+	if err != nil {
+		e.Error(500, err, "")
+		return
+	}
+	e.OK(chapterVO, "ok")
 }

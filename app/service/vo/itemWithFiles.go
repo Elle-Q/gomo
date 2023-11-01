@@ -22,17 +22,19 @@ type ItemVO struct {
 }
 
 type ItemWithFilesVO struct {
-	ID       int64
-	Name     string
-	RescType string
-	Desc     string
-	Tags     []string
-	Author   string
-	Scores   float64
-	CatID    int64
-	CatTitle string
-	DownCnt  int64
-	Main     []models.File
-	Refs     []models.File
-	Preview  []models.File
+	ID         int64
+	Name       string
+	Type       string
+	Desc       string
+	Tags       []string
+	Author     string
+	Scores     float64
+	Price      float64
+	CatID      int64
+	CatTitle   string
+	DownCnt    int64
+	Main       string
+	Attachment []models.File
+	Preview    []models.File
+	Chapters   []ChapterVO
 }

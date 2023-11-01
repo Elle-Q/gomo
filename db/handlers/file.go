@@ -3,6 +3,7 @@ package handlers
 import (
 	"database/sql"
 	"fmt"
+	"github.com/lib/pq"
 	"leetroll/db"
 	"leetroll/db/models"
 	"time"
@@ -34,11 +35,34 @@ func (h *FileHandler) QueryByItemId(itemId int, list *[]models.File) *FileHandle
 }
 
 // 根据ids查找所有文件
-func (h *FileHandler) QueryByIds(ids string, list *[]models.File) *FileHandler {
+func (h *FileHandler) QueryByIdstr(ids string, list *[]models.File) *FileHandler {
 
 	sql := fmt.Sprintf("select id, type, item_id, name,size,format,bucket,key,mark1, update_time,create_time from public.file where id IN(%s)", ids)
 
 	rows, err := h.DB.Query(sql)
+
+	if err != nil {
+		_ = h.AddError(err)
+		return h
+	}
+
+	defer rows.Close()
+	parseErr := parseRows(rows, list)
+
+	if parseErr != nil {
+		_ = h.AddError(parseErr)
+		return h
+	}
+	return h
+
+}
+
+// 根据ids查找所有文件
+func (h *FileHandler) QueryByIds(ids []int64, list *[]models.File) *FileHandler {
+
+	sql := "select id, type, item_id, name,size,format,bucket,key,mark1, update_time,create_time from public.file where id =ANY($1)"
+
+	rows, err := h.DB.Query(sql, pq.Array(ids))
 
 	if err != nil {
 		_ = h.AddError(err)
@@ -101,7 +125,6 @@ func (h *FileHandler) Save(model *models.File) *FileHandler {
 	}
 	model.ID = int64(returnID)
 	return h
-
 }
 
 func (h *FileHandler) Delete(id int) *FileHandler {

@@ -5,6 +5,7 @@ import (
 	"fmt"
 	"github.com/qiniu/go-sdk/v7/auth/qbox"
 	"github.com/qiniu/go-sdk/v7/storage"
+	"io"
 	"leetroll/config"
 	"mime/multipart"
 	"os"
@@ -18,7 +19,7 @@ func UploadLocal(filePath string, fileName string, name string) (link string) {
 	key := fmt.Sprintf("%s/%s/%s", "config", name, fileName)
 
 	cfg := storage.Config{}
-	cfg.Zone = &storage.ZoneXinjiapo
+	cfg.Region = &storage.ZoneXinjiapo
 	cfg.UseHTTPS = false
 	cfg.UseCdnDomains = false
 
@@ -52,22 +53,18 @@ func UploadFilePrivate(file multipart.File, len int64, key string) (string, erro
 	return uploadFile(file, len, key, upToken)
 }
 
-func uploadFile(file multipart.File, len int64, key string, token string) (string, error) {
+func uploadFile(file io.Reader, len int64, key string, token string) (string, error) {
 
 	//cfg
 	cfg := storage.Config{}
-	cfg.Zone = &storage.ZoneXinjiapo
+	cfg.Region = &storage.ZoneXinjiapo
 	cfg.UseHTTPS = false
-	cfg.UseCdnDomains = false
+	cfg.UseCdnDomains = true
 
 	formUploader := storage.NewFormUploader(&cfg)
 	ret := storage.PutRet{}
 
-	putExtra := storage.PutExtra{
-		Params: map[string]string{
-			"x:name": "avatar", //啊啊啊啊啊啊~
-		},
-	}
+	putExtra := storage.PutExtra{}
 	err := formUploader.Put(context.Background(), &ret, token, key, file, len, &putExtra)
 	if err != nil {
 		fmt.Println(err)

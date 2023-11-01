@@ -46,11 +46,11 @@ func UploadLocalDir(typeConfig string, dir string) {
 			model.Type = typeConfig
 			makFileModel(file, &model)
 
-			err := service.Save(&model).Error
-			if err != nil {
-				log.Fatal(err)
-				return
-			}
+			//err := service.Save(&model).Error
+			//if err != nil {
+			//	log.Fatal(err)
+			//	return
+			//}
 			fmt.Printf("%s  --- %s", tool.Green(filePath), key)
 			fmt.Println()
 		}()

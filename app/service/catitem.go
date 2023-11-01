@@ -4,6 +4,7 @@ import (
 	"leetroll/app/service/vo"
 	"leetroll/db/handlers"
 	"leetroll/db/models"
+	"leetroll/qiniu"
 )
 
 type CatItemService struct {
@@ -24,14 +25,17 @@ func (c *CatItemService) ListCatsWithItems(vos *[]vo.SubjectVO) *CatItemService 
 
 	for _, cat := range catList {
 		//查询item(cat/4条)
-		itemVO := vo.SubjectVO{}
+		subjectVo := vo.SubjectVO{}
 		itemList := make([]models.Item, 0)
-		itemHandler.ListByCat(cat.ID, maxSize, &itemList)
-		itemVO.Items = itemList
-		itemVO.CatID = cat.ID
-		itemVO.CatTitle = cat.Title
-		itemVO.CatSubTitle = cat.SubTitle
-		*vos = append(*vos, itemVO)
+		itemHandler.ListPopularByCat(cat.ID, maxSize, &itemList)
+		for i, _ := range itemList {
+			itemList[i].Main = qiniu.GetPrivateUrl(itemList[i].Main)
+		}
+		subjectVo.Items = itemList
+		subjectVo.CatID = cat.ID
+		subjectVo.CatTitle = cat.Title
+		subjectVo.CatSubTitle = cat.SubTitle
+		*vos = append(*vos, subjectVo)
 	}
 
 	return c

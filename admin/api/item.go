@@ -13,7 +13,11 @@ import (
 	"leetroll/db/models"
 	"leetroll/qiniu"
 	"leetroll/tool"
+	"mime/multipart"
+	"sync"
 )
+
+var wg sync.WaitGroup
 
 type Item struct {
 	apis.Api
@@ -51,6 +55,7 @@ func (e Item) GetFilesByItemId(ctx *gin.Context) {
 		Bind(&req, nil).
 		MakeService(&itemService.ItemHandler.Handler).
 		MakeService(&itemService.FileHandler.Handler).
+		MakeService(&itemService.ChapterHandler.Handler).
 		Errors
 	if err != nil {
 		e.Error(500, err, "")
@@ -66,6 +71,7 @@ func (e Item) GetFilesByItemId(ctx *gin.Context) {
 	e.OK(itemVO, "ok")
 }
 
+// 获取所有的item
 func (e Item) List(ctx *gin.Context) {
 	handler := handlers.ItemHandler{}
 	err := e.MakeContext(ctx).
@@ -89,6 +95,7 @@ func (e Item) List(ctx *gin.Context) {
 	e.OK(list, "ok")
 }
 
+// 新增或更新item
 func (e Item) Update(ctx *gin.Context) {
 	req := dto.ItemUpdateReq{}
 	handler := handlers.ItemHandler{}
@@ -131,18 +138,18 @@ func (e Item) Delete(ctx *gin.Context) {
 
 }
 
-// item 资源文件上传
+// item 资源文件上传 (main, preview, attachment)
 func (e Item) Upload(ctx *gin.Context) {
 	form, _ := ctx.MultipartForm()
-	files := form.File["Files[]"]
+	mainFiles := form.File["Main[]"]
+	previewFiles := form.File["Preview[]"]
+	attachmentFiles := form.File["Attachment[]"]
 
 	req := dto.ItemRescUploadReq{}
-	itemHandler := handlers.ItemHandler{}
 	fileHandler := handlers.FileHandler{}
 	err := e.MakeContext(ctx).
 		MakeDB().
 		Bind(&req, binding.Form).
-		MakeService(&itemHandler.Handler).
 		MakeService(&fileHandler.Handler).
 		Errors
 	if err != nil {
@@ -150,13 +157,26 @@ func (e Item) Upload(ctx *gin.Context) {
 		return
 	}
 
-	//上传文件到七牛
-	//保存上传进度persistId
-	//保存所有信息到db
+	uploadByType(req.ItemID, "main", mainFiles, fileHandler)
+	uploadByType(req.ItemID, "preview", previewFiles, fileHandler)
+	uploadByType(req.ItemID, "attachment", attachmentFiles, fileHandler)
+
+	e.OK("", "ok")
+}
+
+// 按类型上传 (main, preview, attachment)
+// 上传文件到七牛
+// 保存上传进度persistId
+// 保存所有信息到db
+func uploadByType(itemID int, upType string, files []*multipart.FileHeader, handler handlers.FileHandler) []int64 {
+	fileIds := make([]int64, 0)
 	for _, fileHeader := range files {
+		wg.Add(1)
 		fileHeader := fileHeader
 		go func() {
-			key, m3u8Key, e := qiniu.UploadItemResc(fileHeader, req.Type, req.ItemID)
+			defer wg.Done()
+
+			key, m3u8Key, e := qiniu.UploadItemResc(fileHeader, upType, itemID)
 			if e != nil {
 				return
 			}
@@ -171,21 +191,20 @@ func (e Item) Upload(ctx *gin.Context) {
 			name, format := tool.ParseFileName(fileHeader.Filename)
 			file.Size = float32(fileHeader.Size)
 			file.Format = format
-			file.Type = req.Type
+			file.Type = upType
 			file.Name = name
 			file.Bucket = config.QiniuConfig.VideoBucket
-			file.ItemId = int64(req.ItemID)
+			file.ItemId = int64(itemID)
 			//保存文件
-			errDb := fileHandler.Save(&file).Error
+			errDb := handler.Save(&file).Error
 
+			fileIds = append(fileIds, file.ID)
 			if errDb != nil {
 				return
 			}
-
 			fmt.Println("保存文件信息到数据库")
 		}()
-
 	}
-
-	e.OK("", "ok")
+	wg.Wait()
+	return fileIds
 }

@@ -9,7 +9,7 @@ func main() {
 	config.InitDB()
 
 	//上传本地图片
-	//UploadLocalDir("default_avatar", "F:\\dev\\homolog\\默认头像")
+	UploadLocalDir("default_avatar", "F:\\dev\\homolog\\logo")
 	//UploadLocalDir("default_bg", "F:\\dev\\homolog\\默认背景")
 	//img.UploadLocal("F:\\dev\\homolog\\默认背景\\bg6.jpg", "背景图片")
 

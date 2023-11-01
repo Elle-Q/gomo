@@ -76,9 +76,9 @@ func UploadVideo(reader io.Reader, len int64, key string, m3u8Name string) (stri
 	upToken := putPolicy.UploadToken(mac)
 
 	cfg := storage.Config{}
-	cfg.Zone = &storage.ZoneXinjiapo //对应机房
-	cfg.UseHTTPS = false             //是否使用https域名
-	cfg.UseCdnDomains = false        //上传是否使用CDN加速
+	cfg.Region = &storage.ZoneXinjiapo //对应机房
+	cfg.UseHTTPS = false               //是否使用https域名
+	cfg.UseCdnDomains = true           //上传是否使用CDN加速
 
 	formUploader := storage.NewFormUploader(&cfg)
 	ret := storage.PutRet{}

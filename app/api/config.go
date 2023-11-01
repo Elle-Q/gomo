@@ -7,8 +7,6 @@ import (
 	"leetroll/db/handlers"
 	"leetroll/db/models"
 	"leetroll/qiniu"
-	"strconv"
-	"strings"
 )
 
 type Config struct {
@@ -41,15 +39,9 @@ func (e Config) FindDefaultAvatarByName(ctx *gin.Context) {
 		return
 	}
 
-	vals := strings.Split(config.Val, ",")
-	ids := make([]int, len(vals))
-	for i := range ids {
-		ids[i], _ = strconv.Atoi(vals[i])
-	}
-
 	//读取配置项值, 查找file表
 	var files []models.File
-	err2 := fileService.QueryByIds(config.Val, &files).Error
+	err2 := fileService.QueryByIdstr(config.Val, &files).Error
 
 	if err2 != nil {
 		e.Error(500, err2, err2.Error())

@@ -34,6 +34,7 @@ func registerCheckRouter(g *gin.RouterGroup) {
 	{
 		item.GET("/:ID", _ItemApi.Get)
 		item.GET("/files/:ID", _ItemApi.GetItemAndFilesByItemId)
+		item.GET("/chapter/:ID", _ItemApi.GetChapter)
 	}
 
 }

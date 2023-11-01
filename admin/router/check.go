@@ -38,6 +38,7 @@ func registerCheckRouter(g *gin.RouterGroup) {
 		item.GET("/list", _ItemApi.List)
 		item.POST("/update", _ItemApi.Update)
 		item.POST("/upload", _ItemApi.Upload)
+		item.POST("/chapter/upload", _ItemApi.Upload)
 		item.POST("/delete", _ItemApi.Delete)
 		item.GET("/:ID", _ItemApi.Get)
 		item.GET("/files/:ID", _ItemApi.GetFilesByItemId)
@@ -46,6 +47,14 @@ func registerCheckRouter(g *gin.RouterGroup) {
 	_FileApi := api.File{}
 	file := g.Group("/file").Use(middleware.AuthJWTMiddleware())
 	{
-		file.POST("/delete", _FileApi.DeleteQNFile)
+		file.POST("/delete", _FileApi.DeleteFile)
+	}
+
+	_ChapterApi := api.Chapter{}
+	chapter := g.Group("/chapter").Use(middleware.AuthJWTMiddleware())
+	{
+		chapter.POST("/upload", _ChapterApi.Upload)
+		chapter.POST("/file/delete", _ChapterApi.FileDelete)
+
 	}
 }
