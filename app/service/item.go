@@ -121,17 +121,24 @@ func (e *ItemService) setQnLink(files []models.File) {
 }
 
 // 获取章节信息
-func (e *ItemService) GetChapter(id int, vo *vo.ChapterVO) *ItemService {
+func (e *ItemService) GetChapters(itemId int, vos *[]vo.ChapterVO) *ItemService {
 	fileHandler := e.FileHandler
 	chapterHandler := e.ChapterHandler
 
-	episodes := make([]models.File, 0)
-	episodeIds := chapterHandler.QueryEpisodeIds(id)
-	fileHandler.QueryByIds(episodeIds, &episodes)
+	//查询item下的所有章节id
+	chapters := make([]models.Chapter, 0)
+	chapterHandler.QueryByItemId(itemId, &chapters)
+	for _, chapter := range chapters {
+		episodes := make([]models.File, 0)
+		episodeIds := chapterHandler.QueryEpisodeIds(int(chapter.ID))
+		fileHandler.QueryByIds(episodeIds, &episodes)
+		e.setQnLink(episodes)
 
-	e.setQnLink(episodes)
-
-	vo.Episodes = episodes
-
+		chapterVo := vo.ChapterVO{}
+		chapterVo.ID = chapter.ID
+		chapterVo.Chapter = chapter.Chapter
+		chapterVo.Episodes = episodes
+		*vos = append(*vos, chapterVo)
+	}
 	return e
 }

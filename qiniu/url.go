@@ -24,7 +24,6 @@ func GetPrivateUrl(key string) string {
 	domain := config.QiniuConfig.VideoDomain
 	deadline := time.Now().Add(time.Hour * 360).Unix() //1小时有效期
 	privateAccessURL := storage.MakePrivateURLv2(mac, domain, key, deadline)
-
 	//fmt.Println("私有空间访问链接为: ", privateAccessURL)
 	return privateAccessURL
 }

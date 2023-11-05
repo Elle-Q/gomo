@@ -62,8 +62,8 @@ func (e Item) GetItemAndFilesByItemId(ctx *gin.Context) {
 	e.OK(itemVO, "ok")
 }
 
-// 根据itemId查询文件明细
-func (e Item) GetChapter(ctx *gin.Context) {
+// 根据itemId查询章节明细
+func (e Item) GetChapters(ctx *gin.Context) {
 	req := dto.ItemIDReq{}
 	itemService := service.NewItemService()
 	err := e.MakeContext(ctx).
@@ -78,9 +78,9 @@ func (e Item) GetChapter(ctx *gin.Context) {
 		return
 	}
 
-	chapterVO := vo.ChapterVO{}
+	chapterVO := make([]vo.ChapterVO, 0)
 
-	err = itemService.GetChapter(req.ID, &chapterVO).Error
+	err = itemService.GetChapters(req.ID, &chapterVO).Error
 	if err != nil {
 		e.Error(500, err, "")
 		return
